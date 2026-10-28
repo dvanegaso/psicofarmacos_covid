@@ -1,0 +1,420 @@
+{
+  "descargado_utc": "2026-10-26 15:01:57 UTC",
+  "consulta": {
+    "nombre": "N05A",
+    "lote": ["N05AH04", "N05AX08", "N05AX12", "N05AE05", "N05AH03", "N05AH02", "N05AD01", "N05AA02", "N05AX13"],
+    "ajuste_inflacion": {
+      "fuente": "IPC del DANE (Colombia), aplicado por Aphorics: POST /v1/pivot con unit = 'cop_constant' - 'cop_constant deflates with DANE CPI to latest-month pesos'",
+      "documentacion": "https://aphorics.com/app/integraciones/api (POST /v1/pivot, campo data[].valor_total)",
+      "metodo": "factor_ipc(mes) = ventas en cop_constant / ventas en cop_current del total filtrado en ese mes; valor_corregido_inflacion = valor_original * factor_ipc = valor_original * IPC(mes base) / IPC(mes)",
+      "pendiente": "Aphorics no especifica la serie del IPC (total nacional u otra): confirmar con Aphorics para métodos.",
+      "mes_base": "2026-03"
+    },
+    "partes": [
+      {
+        "nombre": "n05ah04",
+        "filtros": [
+          {
+            "dim": "atc5",
+            "values": [
+              "N05AH04"
+            ]
+          },
+          {
+            "dim": "fecha",
+            "range": {
+              "start": 2015,
+              "end": 2026
+            }
+          }
+        ],
+        "only_titular": true,
+        "ampliar": true,
+        "detalle": false,
+        "canales": ["institucional", "comercial"],
+        "n_cum": 85,
+        "cums": ["19995113-6", "20016921-3", "19996292-7", "20035929-2", "19999459-2", "19999461-2", "20093306-1", "20025451-1", "19999460-2", "19995320-8", "19995113-13", "224719-5", "19999458-2", "19991189-3", "19996348-6", "224715-6", "20093311-1", "19979152-4", "19949755-1", "20043700-10", "224717-5", "19995113-15", "20115222-3", "20083780-1", "19981996-1", "19990978-8", "19949719-3", "20043686-11", "20043691-12", "19979154-4", "19964632-1", "20043696-10", "19991189-12", "19990978-3", "20115224-3", "19996292-14", "20093307-1", "20037678-1", "20112759-1", "19960787-1", "19995320-14", "20046916-4", "19996348-14", "19949721-2", "20037676-1", "20037516-1", "20093308-2", "20016921-2", "20037515-1", "20093308-5", "20073107-1", "19976916-3", "19991313-7", "19981995-1", "20016921-6", "20142687-2", "19960787-2", "20010591-6", "20043696-12", "20009949-6", "20244153-1", "224717-2", "19949755-20", "20243782-1", "20014046-8", "19949721-30", "19949719-5", "20175535-1", "20175534-1", "20175528-1", "20020105-1", "19991313-3", "20001050-1", "20016921-1", "20035361-2", "20014046-5", "20037102-4", "19999458-4", "19968894-2", "19949721-5", "20036557-1", "20037103-21", "20046918-6", "19949719-2", "20036554-1"],
+        "n_expedientes": 63,
+        "consultas_estimadas": 70,
+        "ajuste_inflacion": {
+          "fuente": "IPC del DANE (Colombia), aplicado por Aphorics: POST /v1/pivot con unit = 'cop_constant' - 'cop_constant deflates with DANE CPI to latest-month pesos'",
+          "documentacion": "https://aphorics.com/app/integraciones/api (POST /v1/pivot, campo data[].valor_total)",
+          "metodo": "factor_ipc(mes) = ventas en cop_constant / ventas en cop_current del total filtrado en ese mes; valor_corregido_inflacion = valor_original * factor_ipc = valor_original * IPC(mes base) / IPC(mes)",
+          "pendiente": "Aphorics no especifica la serie del IPC (total nacional u otra): confirmar con Aphorics para métodos.",
+          "mes_base": "2026-03"
+        },
+        "cuadre": {
+          "ok": true,
+          "max_dif_pct": 4.4409e-14
+        }
+      },
+      {
+        "nombre": "n05ax08",
+        "filtros": [
+          {
+            "dim": "atc5",
+            "values": [
+              "N05AX08"
+            ]
+          },
+          {
+            "dim": "fecha",
+            "range": {
+              "start": 2015,
+              "end": 2026
+            }
+          }
+        ],
+        "only_titular": true,
+        "ampliar": true,
+        "detalle": false,
+        "canales": ["institucional", "comercial"],
+        "n_cum": 59,
+        "cums": ["19998043-3", "19934447-2", "19998043-2", "19998043-1", "50888-5", "19934447-1", "20007289-2", "20007377-2", "19956205-3", "19934447-3", "20007378-2", "49091-1", "49092-1", "20160734-2", "20160735-2", "49090-1", "19936269-4", "19936268-4", "20160725-2", "49092-6", "20054213-5", "19936267-5", "19926483-7", "20037773-1", "20153948-1", "19945676-5", "19945677-5", "19926482-7", "19989120-5", "20054211-5", "19963294-3", "20199943-1", "20199946-1", "19989457-5", "19989121-5", "19960346-1", "19960347-1", "50888-2", "20199954-1", "19926482-3", "19927635-1", "19926483-3", "20054210-5", "20054213-6", "20021022-2", "20021023-2", "19968896-2", "20021021-2", "20219054-1", "50888-1", "19968897-2", "19927570-1", "19984680-1", "19989122-5", "20054211-1", "19927636-1", "19936267-3", "19989121-1", "20019397-4"],
+        "n_expedientes": 46,
+        "consultas_estimadas": 56,
+        "ajuste_inflacion": {
+          "fuente": "IPC del DANE (Colombia), aplicado por Aphorics: POST /v1/pivot con unit = 'cop_constant' - 'cop_constant deflates with DANE CPI to latest-month pesos'",
+          "documentacion": "https://aphorics.com/app/integraciones/api (POST /v1/pivot, campo data[].valor_total)",
+          "metodo": "factor_ipc(mes) = ventas en cop_constant / ventas en cop_current del total filtrado en ese mes; valor_corregido_inflacion = valor_original * factor_ipc = valor_original * IPC(mes base) / IPC(mes)",
+          "pendiente": "Aphorics no especifica la serie del IPC (total nacional u otra): confirmar con Aphorics para métodos.",
+          "mes_base": "2026-03"
+        },
+        "cuadre": {
+          "ok": true,
+          "max_dif_pct": 6.6613e-14
+        }
+      },
+      {
+        "nombre": "n05ax12",
+        "filtros": [
+          {
+            "dim": "atc5",
+            "values": [
+              "N05AX12"
+            ]
+          },
+          {
+            "dim": "fecha",
+            "range": {
+              "start": 2015,
+              "end": 2026
+            }
+          }
+        ],
+        "only_titular": true,
+        "ampliar": true,
+        "detalle": false,
+        "canales": ["institucional", "comercial"],
+        "n_cum": 18,
+        "cums": ["20115305-4", "19984722-5", "19988981-7", "20014926-3", "20091370-1", "20094480-2", "19991805-1", "20014921-3", "20087873-1", "20258681-1", "20173114-2", "19941492-2", "20094480-7", "19988981-10", "19941859-1", "20173116-2", "20115305-3", "20094480-4"],
+        "n_expedientes": 14,
+        "consultas_estimadas": 36,
+        "ajuste_inflacion": {
+          "fuente": "IPC del DANE (Colombia), aplicado por Aphorics: POST /v1/pivot con unit = 'cop_constant' - 'cop_constant deflates with DANE CPI to latest-month pesos'",
+          "documentacion": "https://aphorics.com/app/integraciones/api (POST /v1/pivot, campo data[].valor_total)",
+          "metodo": "factor_ipc(mes) = ventas en cop_constant / ventas en cop_current del total filtrado en ese mes; valor_corregido_inflacion = valor_original * factor_ipc = valor_original * IPC(mes base) / IPC(mes)",
+          "pendiente": "Aphorics no especifica la serie del IPC (total nacional u otra): confirmar con Aphorics para métodos.",
+          "mes_base": "2026-03"
+        },
+        "cuadre": {
+          "ok": true,
+          "max_dif_pct": 2.2204e-14
+        }
+      },
+      {
+        "nombre": "n05ae05",
+        "filtros": [
+          {
+            "dim": "atc5",
+            "values": [
+              "N05AE05"
+            ]
+          },
+          {
+            "dim": "fecha",
+            "range": {
+              "start": 2015,
+              "end": 2026
+            }
+          }
+        ],
+        "only_titular": true,
+        "ampliar": true,
+        "detalle": false,
+        "canales": ["comercial", "institucional"],
+        "n_cum": 7,
+        "cums": ["20192656-1", "20192656-2", "20156892-2", "20192656-3", "20156886-2", "20167332-2", "20167332-5"],
+        "n_expedientes": 4,
+        "consultas_estimadas": 30,
+        "ajuste_inflacion": {
+          "fuente": "IPC del DANE (Colombia), aplicado por Aphorics: POST /v1/pivot con unit = 'cop_constant' - 'cop_constant deflates with DANE CPI to latest-month pesos'",
+          "documentacion": "https://aphorics.com/app/integraciones/api (POST /v1/pivot, campo data[].valor_total)",
+          "metodo": "factor_ipc(mes) = ventas en cop_constant / ventas en cop_current del total filtrado en ese mes; valor_corregido_inflacion = valor_original * factor_ipc = valor_original * IPC(mes base) / IPC(mes)",
+          "pendiente": "Aphorics no especifica la serie del IPC (total nacional u otra): confirmar con Aphorics para métodos.",
+          "mes_base": "2026-03"
+        },
+        "cuadre": {
+          "ok": true,
+          "max_dif_pct": 0
+        }
+      },
+      {
+        "nombre": "n05ah03",
+        "filtros": [
+          {
+            "dim": "atc5",
+            "values": [
+              "N05AH03"
+            ]
+          },
+          {
+            "dim": "fecha",
+            "range": {
+              "start": 2015,
+              "end": 2026
+            }
+          }
+        ],
+        "only_titular": true,
+        "ampliar": true,
+        "detalle": false,
+        "canales": ["institucional", "comercial"],
+        "n_cum": 48,
+        "cums": ["19951528-2", "210771-2", "19974415-2", "19974415-3", "20012570-6", "19951527-2", "19924506-1", "19974414-2", "20012572-6", "210773-2", "19974414-3", "19968710-1", "19968711-1", "19946412-16", "19913730-1", "210771-1", "19976270-1", "19976269-2", "19913731-1", "20073329-1", "20086944-1", "19946412-6", "20090136-2", "19979471-6", "19946498-11", "19947426-2", "19979472-6", "19947426-6", "19946498-5", "20008548-1", "19995765-4", "19963331-1", "19947427-5", "19989933-1", "19995764-4", "19979471-3", "19913730-8", "19979472-3", "19925689-2", "19976269-1", "20055892-2", "19972544-1", "20055892-6", "19946498-6", "20055890-6", "19946412-5", "20055890-2", "19946412-4"],
+        "n_expedientes": 33,
+        "consultas_estimadas": 50,
+        "ajuste_inflacion": {
+          "fuente": "IPC del DANE (Colombia), aplicado por Aphorics: POST /v1/pivot con unit = 'cop_constant' - 'cop_constant deflates with DANE CPI to latest-month pesos'",
+          "documentacion": "https://aphorics.com/app/integraciones/api (POST /v1/pivot, campo data[].valor_total)",
+          "metodo": "factor_ipc(mes) = ventas en cop_constant / ventas en cop_current del total filtrado en ese mes; valor_corregido_inflacion = valor_original * factor_ipc = valor_original * IPC(mes base) / IPC(mes)",
+          "pendiente": "Aphorics no especifica la serie del IPC (total nacional u otra): confirmar con Aphorics para métodos.",
+          "mes_base": "2026-03"
+        },
+        "cuadre": {
+          "ok": true,
+          "max_dif_pct": 4.4409e-14
+        }
+      },
+      {
+        "nombre": "n05ah02",
+        "filtros": [
+          {
+            "dim": "atc5",
+            "values": [
+              "N05AH02"
+            ]
+          },
+          {
+            "dim": "fecha",
+            "range": {
+              "start": 2015,
+              "end": 2026
+            }
+          }
+        ],
+        "only_titular": true,
+        "ampliar": true,
+        "detalle": false,
+        "canales": ["institucional", "comercial"],
+        "n_cum": 31,
+        "cums": ["19974655-3", "22511-1", "19974655-1", "20011384-5", "19975977-3", "22511-4", "19975977-1", "20155337-3", "1980471-1", "19955124-1", "19955124-3", "20155337-1", "19974655-2", "1980471-7", "20011384-1", "19987650-9", "19960386-1", "19975977-5", "53338-2", "19960385-1", "19960385-12", "19941740-1", "53336-2", "19941848-1", "20023769-1", "20023768-1", "19941740-6", "19941740-4", "19941848-4", "19941848-5", "19936074-4"],
+        "n_expedientes": 17,
+        "consultas_estimadas": 42,
+        "ajuste_inflacion": {
+          "fuente": "IPC del DANE (Colombia), aplicado por Aphorics: POST /v1/pivot con unit = 'cop_constant' - 'cop_constant deflates with DANE CPI to latest-month pesos'",
+          "documentacion": "https://aphorics.com/app/integraciones/api (POST /v1/pivot, campo data[].valor_total)",
+          "metodo": "factor_ipc(mes) = ventas en cop_constant / ventas en cop_current del total filtrado en ese mes; valor_corregido_inflacion = valor_original * factor_ipc = valor_original * IPC(mes base) / IPC(mes)",
+          "pendiente": "Aphorics no especifica la serie del IPC (total nacional u otra): confirmar con Aphorics para métodos.",
+          "mes_base": "2026-03"
+        },
+        "cuadre": {
+          "ok": true,
+          "max_dif_pct": 3.3307e-14
+        }
+      },
+      {
+        "nombre": "n05ad01",
+        "filtros": [
+          {
+            "dim": "atc5",
+            "values": [
+              "N05AD01"
+            ]
+          },
+          {
+            "dim": "fecha",
+            "range": {
+              "start": 2015,
+              "end": 2026
+            }
+          }
+        ],
+        "only_titular": true,
+        "ampliar": true,
+        "detalle": false,
+        "canales": ["institucional", "comercial"],
+        "n_cum": 35,
+        "cums": ["19974149-2", "19998377-1", "20061284-1", "19940398-2", "20152993-1", "19999331-1", "19940401-3", "215076-2", "19974149-1", "20004992-2", "19929092-1", "19940401-2", "19940398-1", "11417-4", "1984338-3", "11416-2", "19934936-3", "19992126-1", "51934-3", "20004992-6", "214659-1", "20037652-3", "19945268-1", "20056546-2", "45922-3", "20758-1", "47764-4", "19948030-1", "214659-2", "214659-3", "215076-3", "19940655-4", "19940401-1", "20004992-1", "45922-1"],
+        "n_expedientes": 25,
+        "consultas_estimadas": 44,
+        "ajuste_inflacion": {
+          "fuente": "IPC del DANE (Colombia), aplicado por Aphorics: POST /v1/pivot con unit = 'cop_constant' - 'cop_constant deflates with DANE CPI to latest-month pesos'",
+          "documentacion": "https://aphorics.com/app/integraciones/api (POST /v1/pivot, campo data[].valor_total)",
+          "metodo": "factor_ipc(mes) = ventas en cop_constant / ventas en cop_current del total filtrado en ese mes; valor_corregido_inflacion = valor_original * factor_ipc = valor_original * IPC(mes base) / IPC(mes)",
+          "pendiente": "Aphorics no especifica la serie del IPC (total nacional u otra): confirmar con Aphorics para métodos.",
+          "mes_base": "2026-03"
+        },
+        "cuadre": {
+          "ok": true,
+          "max_dif_pct": 2.2204e-14
+        }
+      },
+      {
+        "nombre": "n05aa02",
+        "filtros": [
+          {
+            "dim": "atc5",
+            "values": [
+              "N05AA02"
+            ]
+          },
+          {
+            "dim": "fecha",
+            "range": {
+              "start": 2015,
+              "end": 2026
+            }
+          }
+        ],
+        "only_titular": true,
+        "ampliar": true,
+        "detalle": false,
+        "canales": ["comercial", "institucional"],
+        "n_cum": 15,
+        "cums": ["19977387-2", "19921589-2", "19918131-1", "19973772-5", "19943590-2", "19959695-3", "19973772-1", "19953848-1", "19943590-1", "19953957-1", "20220614-1", "19959695-2", "19919778-1", "19953169-4", "19919778-3"],
+        "n_expedientes": 11,
+        "consultas_estimadas": 34,
+        "ajuste_inflacion": {
+          "fuente": "IPC del DANE (Colombia), aplicado por Aphorics: POST /v1/pivot con unit = 'cop_constant' - 'cop_constant deflates with DANE CPI to latest-month pesos'",
+          "documentacion": "https://aphorics.com/app/integraciones/api (POST /v1/pivot, campo data[].valor_total)",
+          "metodo": "factor_ipc(mes) = ventas en cop_constant / ventas en cop_current del total filtrado en ese mes; valor_corregido_inflacion = valor_original * factor_ipc = valor_original * IPC(mes base) / IPC(mes)",
+          "pendiente": "Aphorics no especifica la serie del IPC (total nacional u otra): confirmar con Aphorics para métodos.",
+          "mes_base": "2026-03"
+        },
+        "cuadre": {
+          "ok": true,
+          "max_dif_pct": 3.3307e-14
+        }
+      },
+      {
+        "nombre": "n05ax13",
+        "filtros": [
+          {
+            "dim": "atc5",
+            "values": [
+              "N05AX13"
+            ]
+          },
+          {
+            "dim": "fecha",
+            "range": {
+              "start": 2015,
+              "end": 2026
+            }
+          }
+        ],
+        "only_titular": true,
+        "ampliar": true,
+        "detalle": false,
+        "canales": ["institucional", "comercial"],
+        "n_cum": 13,
+        "cums": ["20020734-5", "20020735-2", "20020732-1", "20112358-5", "20112358-7", "20112358-3", "19983120-2", "19983119-2", "20219445-1", "20219445-2", "19983122-2", "20020735-1", "20020734-2"],
+        "n_expedientes": 8,
+        "consultas_estimadas": 34,
+        "ajuste_inflacion": {
+          "fuente": "IPC del DANE (Colombia), aplicado por Aphorics: POST /v1/pivot con unit = 'cop_constant' - 'cop_constant deflates with DANE CPI to latest-month pesos'",
+          "documentacion": "https://aphorics.com/app/integraciones/api (POST /v1/pivot, campo data[].valor_total)",
+          "metodo": "factor_ipc(mes) = ventas en cop_constant / ventas en cop_current del total filtrado en ese mes; valor_corregido_inflacion = valor_original * factor_ipc = valor_original * IPC(mes base) / IPC(mes)",
+          "pendiente": "Aphorics no especifica la serie del IPC (total nacional u otra): confirmar con Aphorics para métodos.",
+          "mes_base": "2026-03"
+        },
+        "cuadre": {
+          "ok": true,
+          "max_dif_pct": 3.3307e-14
+        }
+      }
+    ]
+  },
+  "tablas": {
+    "numeros": {
+      "filas": 27369,
+      "columnas": ["fecha", "cum", "canal", "valor_original", "valor_corregido_inflacion", "unidades_comerciales", "unidades_umd", "cantidad_activo"]
+    },
+    "ficha": {
+      "filas": 311,
+      "columnas": ["cum", "expediente", "origen", "molecule", "molecula_atc5", "atc5", "nombre_atc5", "atc4", "nombre_atc4", "atc3", "atc2", "atc1", "ventas_periodo", "manufacturer", "parent_company", "brand", "form", "concentracion", "umd", "generico", "originador", "nature", "kind", "unidad_activo", "nombre_atc5_aphorics", "molecule_aphorics", "molecule_imputada", "umd_por_unidad", "activo_por_umd", "producto", "titular", "registro_sanitario", "estado_registro", "fecha_expedicion", "fecha_vencimiento", "venta_categoria", "desabastecimiento"]
+    },
+    "deflactor": {
+      "filas": 135,
+      "columnas": ["fecha", "factor_ipc", "mes_base", "fuente"]
+    },
+    "completa": {
+      "filas": 16785,
+      "columnas": ["CUM", "ATC", "Grupo ATC", "Nombre Grupo ATC", "Descripción ATC", "Principio Activo", "Concentración", "Forma Farmacéutica", "Producto", "Titular", "Registro Sanitario", "Estado Registro", "Fecha", "Valor Total Comercial", "Valor Total Institucional", "Valor Total Comercial Corregido Inflación", "Valor Total Institucional Corregido Inflación", "Unidades Comercial", "Unidades Institucional"]
+    }
+  },
+  "version_datos": "tramites-auto-2026-10-26-from-116beac0a1",
+  "fuentes": [
+    {
+      "fuente": "sismed",
+      "corte": "2026-Q1",
+      "ultimo_dato": "2026-03-01"
+    },
+    {
+      "fuente": "invima",
+      "corte": "2026-10",
+      "ultimo_dato": "2026-10-14"
+    },
+    {
+      "fuente": "actas",
+      "corte": "2026",
+      "ultimo_dato": "2026-10-26"
+    },
+    {
+      "fuente": "tramites",
+      "corte": "2026-10-26",
+      "ultimo_dato": "2026-10-23"
+    },
+    {
+      "fuente": "publications",
+      "corte": "2026-10-23",
+      "ultimo_dato": "2026-10-23"
+    },
+    {
+      "fuente": "gaceta",
+      "corte": "2026-10-22",
+      "ultimo_dato": "2026-10-22"
+    },
+    {
+      "fuente": "explorador",
+      "corte": "2026-03",
+      "ultimo_dato": "2026-03-01"
+    },
+    {
+      "fuente": "precios_regulados",
+      "corte": "2026-10-18",
+      "ultimo_dato": "2026-10-18"
+    },
+    {
+      "fuente": "desabastecimiento",
+      "corte": "2026-08",
+      "ultimo_dato": "2026-08-31"
+    },
+    {
+      "fuente": "taxonomy",
+      "corte": "2026-10-26",
+      "ultimo_dato": "2026-10-26"
+    }
+  ]
+}

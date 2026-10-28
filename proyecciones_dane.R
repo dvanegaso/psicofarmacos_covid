@@ -22,4 +22,8 @@ rm(proyec_tmp)
 
 proyec = proyec[!is.na(proyec$AÑO),]
 
+proyec = proyec %>% select(AÑO, Total) %>% filter(AÑO < 2026)
 
+colnames(proyec) = c("año", "total_poblacional")
+
+write.csv(proyec, "proyecciones_dane_2018_2025.csv")
