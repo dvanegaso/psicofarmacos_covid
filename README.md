@@ -31,7 +31,7 @@ Este código está estructurado de la siguiente manera:
 └── scraper_ATC_DDD.R
 ```
 
-En este repositorio solo se adjuntan scripts .R y estructura de carpetas debido a los derechos de autoría de los respectivos datos.
+En este repositorio solo se adjuntan scripts .R y estructura de carpetas **sin las bases de datos guardadas** debido a los derechos de autoría de los respectivos datos.
 
 ## Bases de datos
 
