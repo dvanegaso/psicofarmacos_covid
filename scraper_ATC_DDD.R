@@ -45,6 +45,8 @@
 
 # -------------------------- Paquetes ------------------------------------------
 
+rm(list = ls())
+
 # install.packages(c("rvest", "xml2"))   # Ejecutar una vez si faltan
 library(rvest)
 library(xml2)
@@ -167,6 +169,8 @@ message("Filas totales: ", nrow(DDD))
 
 # -------------------------- Exportar ------------------------------------------
 
-write.csv(DDD, "DDD.csv", row.names = FALSE, na = "", fileEncoding = "UTF-8")
+
+
+write.csv(DDD, "diccionarios/DDD.csv", row.names = FALSE, na = "", fileEncoding = "UTF-8")
 message("Archivo guardado: ", normalizePath("DDD.csv"))
 

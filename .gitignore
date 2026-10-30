@@ -1,0 +1,9 @@
+bases/SISMED/*
+!bases/SISMED/.gitkeep
+!bases/SISMED/*/
+bases/SISMED/*/*
+!bases/SISMED/*/.gitkeep
+diccionarios/*
+!diccionarios/.gitkeep
+salidas/*
+!salidas/.gitkeep
