@@ -6,29 +6,30 @@ En este repositorio se encuentra el código manejado para analizar la evolución
 
 Este código está estructurado de la siguiente manera:
 
+```text
 ├── bases/
 │   └── SISMED/
-│       ├── CÓDIGO_ÚNICO_DE_MEDICAMENTOS_VIGENTES_20261025.csv
-│       ├── medicamentos_candidatos.csv
-│       ├── PPED-AreaNac-1950-2017.xlsx
-│       ├── PPED-AreaSexoEdadNac-2018-2070.xlsx
-│       ├── principios_activos.csv
+|       └── CÓDIGO_ÚNICO_DE_MEDICAMENTOS_VIGENTES_20261025.csv
+|       └── medicamentos_candidatos.csv
+|       └── PPED-AreaNac-1950-2017.xlsx
+|       └── PPED-AreaSexoEdadNac-2018-2070.xlsx
+|       └── principios_activos.csv
 │       └── [codigo WHO de principio activo]_2026-10-26/
 │           ├── base completa.csv
 │           └── ficha.csv
 ├── diccionarios/
-│   ├── DDD.csv
-│   └── proyecciones_dane_2017_2025.csv
+|       └── DDD.csv
+|       └── proyecciones_dane_2017_2025.csv
 ├── salidas/
-│   ├── base_sismed_final.csv
-│   └── base_DHD_final.csv
+│       └── base_sismed_final.csv
+|       └── base_DHD_final.csv
 ├── construccion_DHD.R
 ├── escritura de medicamentos.R
 ├── lectura_SISMED.R
 ├── proyecciones_dane.R
 ├── README.md
 └── scraper_ATC_DDD.R
-
+```
 
 En este repositorio solo se adjuntan scripts .R y estructura de carpetas debido a los derechos de autoría de los respectivos datos.
 
