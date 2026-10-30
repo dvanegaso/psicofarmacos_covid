@@ -15,7 +15,7 @@ Este código está estructurado de la siguiente manera:
 |       └── PPED-AreaSexoEdadNac-2018-2070.xlsx
 |       └── principios_activos.csv
 │       └── [codigo WHO de principio activo]_2026-10-26/
-│           ├── base completa.csv
+│           ├── completa.csv
 │           └── ficha.csv
 ├── diccionarios/
 |       └── DDD.csv
