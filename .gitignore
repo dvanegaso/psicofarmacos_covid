@@ -7,3 +7,11 @@ diccionarios/*
 !diccionarios/.gitkeep
 salidas/*
 !salidas/.gitkeep
+bases_SISMED/*
+!bases_SISMED/.gitkeep
+!bases_SISMED/*/
+bases_SISMED/*/*
+!bases_SISMED/*/.gitkeep
+*.csv
+*.parquet
+*.xlsx
