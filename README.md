@@ -9,14 +9,14 @@ Este código está estructurado de la siguiente manera:
 ```text
 ├── bases/
 │   └── SISMED/
+│       └── [codigo WHO de principio activo]_2026-10-26/
+│           ├── completa.csv
+│           └── ficha.csv
 |       └── CÓDIGO_ÚNICO_DE_MEDICAMENTOS_VIGENTES_20261025.csv
 |       └── medicamentos_candidatos.csv
 |       └── PPED-AreaNac-1950-2017.xlsx
 |       └── PPED-AreaSexoEdadNac-2018-2070.xlsx
 |       └── principios_activos.csv
-│       └── [codigo WHO de principio activo]_2026-10-26/
-│           ├── completa.csv
-│           └── ficha.csv
 ├── diccionarios/
 |       └── DDD.csv
 |       └── proyecciones_dane_2017_2025.csv
