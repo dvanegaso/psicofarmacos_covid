@@ -103,7 +103,7 @@ Para la extracción de los datos se ha seguido el siguiente procedimiento:
 La variable $DHD_{t}$ se construyó de la siguiente manera:
 
 $$
-DHD_t = \left[ (mg\ vendidos_t / DDD) / (poblaci\acute{o}n_t \times d\acute{i}as\ del\ mes_t) \right] \times 1000
+DHD_t = \left[ (mg\ vendidos_t / DDD) / (población_t \times días\ del\ mes_t) \right] \times 1000
 $$
 
 Para ello se necesitó de la base de **proyecciones y retroproyecciones del DANE** para la población estimada en el país, base **SISMED** para la cantidad de unidades de medicamentos vendidas, y base **CUM** para revisar la cantidad de principio activo contenido dentro de cada medicamento.
