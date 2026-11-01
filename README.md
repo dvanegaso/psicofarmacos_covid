@@ -6,31 +6,32 @@ En este repositorio se encuentra el código manejado para analizar la evolución
 
 Este código está estructurado de la siguiente manera:
 
+```text
 ├── bases/
+|       └── CÓDIGO_ÚNICO_DE_MEDICAMENTOS_VIGENTES_20261025.csv
+|       └── medicamentos_candidatos.csv
+|       └── PPED-AreaNac-1950-2017.xlsx
+|       └── PPED-AreaSexoEdadNac-2018-2070.xlsx
+|       └── principios_activos.csv
 │   └── SISMED/
-│       ├── CÓDIGO_ÚNICO_DE_MEDICAMENTOS_VIGENTES_20261025.csv
-│       ├── medicamentos_candidatos.csv
-│       ├── PPED-AreaNac-1950-2017.xlsx
-│       ├── PPED-AreaSexoEdadNac-2018-2070.xlsx
-│       ├── principios_activos.csv
 │       └── [codigo WHO de principio activo]_2026-10-26/
-│           ├── base completa.csv
+│           ├── completa.csv
 │           └── ficha.csv
 ├── diccionarios/
-│   ├── DDD.csv
-│   └── proyecciones_dane_2017_2025.csv
+|       └── DDD.csv
+|       └── proyecciones_dane_2017_2025.csv
 ├── salidas/
-│   ├── base_sismed_final.csv
-│   └── base_DHD_final.csv
+│       └── base_sismed_final.csv
+|       └── base_DHD_final.csv
 ├── construccion_DHD.R
 ├── escritura de medicamentos.R
 ├── lectura_SISMED.R
 ├── proyecciones_dane.R
 ├── README.md
 └── scraper_ATC_DDD.R
+```
 
-
-En este repositorio solo se adjuntan scripts .R y estructura de carpetas debido a los derechos de autoría de los respectivos datos.
+En este repositorio solo se adjuntan scripts .R y estructura de carpetas **sin las bases de datos guardadas** debido a los derechos de autoría de los respectivos datos.
 
 ## Bases de datos
 
@@ -102,7 +103,7 @@ Para la extracción de los datos se ha seguido el siguiente procedimiento:
 La variable $DHD_{t}$ se construyó de la siguiente manera:
 
 $$
-DHD_t = \left[ (mg\ vendidos_t / DDD) / (poblaci\acute{o}n_t \times d\acute{i}as\ del\ mes_t) \right] \times 1000
+DHD_t = \left[ (mg\ vendidos_t / DDD) / (población_t \times días\ del\ mes_t) \right] \times 1000
 $$
 
 Para ello se necesitó de la base de **proyecciones y retroproyecciones del DANE** para la población estimada en el país, base **SISMED** para la cantidad de unidades de medicamentos vendidas, y base **CUM** para revisar la cantidad de principio activo contenido dentro de cada medicamento.
