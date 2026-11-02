@@ -1,5 +1,7 @@
 
-# Principios activos
+setwd(dirname(rstudioapi::getSourceEditorContext()$path))
+
+# Principios activos (en código WHO)
 
 principios_activos = c(
   "N05A",
@@ -8,6 +10,8 @@ principios_activos = c(
   "N06A",
   "N03AE01"
 )
+
+# principios activos (en nombre comercial)
 
 medicamentos_candidatos = data.frame(
   principioactivo = c(

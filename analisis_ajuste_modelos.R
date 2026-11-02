@@ -18,17 +18,20 @@ par(mfrow = c(1,3))
 ts.plot(datos %>%
           group_by(mes) %>%
           summarise(DHD = sum(DHD_total)) %>% 
-          select(DHD))
+          select(DHD),
+        main = "Total")
 
 ts.plot(datos %>%
           group_by(mes) %>%
           summarise(DHD = sum(DHD_inst)) %>% 
-          select(DHD))
+          select(DHD),
+        main = "Institucional")
 
 ts.plot(datos %>%
           group_by(mes) %>%
           summarise(DHD = sum(DHD_comm)) %>% 
-          select(DHD))
+          select(DHD),
+        main = "Comercial")
 
 par(mfrow = c(1,1))
 
@@ -37,19 +40,22 @@ par(mfrow = c(1,1))
 par(mfrow = c(1,3))
 
 ts.plot(datos %>%
-          group_by(mes_medicion) %>%
+          group_by(indice) %>%
           summarise(DHD = sum(DHD_total)) %>% 
-          select(DHD))
+          select(DHD),
+        main = "Total")
 
 ts.plot(datos %>%
-          group_by(mes_medicion) %>%
+          group_by(indice) %>%
           summarise(DHD = sum(DHD_inst)) %>% 
-          select(DHD))
+          select(DHD),
+        main = "Institucional")
 
 ts.plot(datos %>%
-          group_by(mes_medicion) %>%
+          group_by(indice) %>%
           summarise(DHD = sum(DHD_comm)) %>% 
-          select(DHD))
+          select(DHD),
+        main = "Comercial")
 
 par(mfrow = c(1,1))
 
@@ -66,7 +72,7 @@ for (i in 1:length(lista_principio)) {
   principio[[i]] = datos %>%
     select(
       principioactivo,
-      mes_medicion,
+      indice,
       DHD_total,
       DHD_inst,
       DHD_comm
@@ -74,14 +80,14 @@ for (i in 1:length(lista_principio)) {
     filter(
       principioactivo == lista_principio[i]
       ) %>%
-    mutate(mes_medicion = as.integer(mes_medicion)) %>%
-    group_by(mes_medicion)%>% 
+    mutate(indice = as.integer(indice)) %>%
+    group_by(indice)%>% 
     summarise(
       DHD_total = sum(DHD_total),
       DHD_inst = sum(DHD_inst),
       DHD_comm = sum(DHD_comm)
       ) %>%
-    as_tsibble(index = mes_medicion, regular = T)
+    as_tsibble(index = indice, regular = T)
   
   if(as.logical(has_gaps(principio[[i]]))){
     cat("Gaps detectados en ", i, "\n")
@@ -89,13 +95,27 @@ for (i in 1:length(lista_principio)) {
     principio[[i]] = principio[[i]] %>% fill_gaps()
   }
 
-  meses[[i]] = summary(principio[[i]]$mes_medicion)
+  meses[[i]] = summary(principio[[i]]$indice)
 }
   
 # [1] "diazepam"     "vortioxetine" con DATOS FALTANTES
 
+j = 1
 
-
+ts.plot(principio[[j]], main = (lista_principio[j])); j = 1 + j
+ts.plot(principio[[j]], main = (lista_principio[j])); j = 1 + j
+ts.plot(principio[[j]], main = (lista_principio[j])); j = 1 + j
+ts.plot(principio[[j]], main = (lista_principio[j])); j = 1 + j
+ts.plot(principio[[j]], main = (lista_principio[j])); j = 1 + j
+ts.plot(principio[[j]], main = (lista_principio[j])); j = 1 + j
+ts.plot(principio[[j]], main = (lista_principio[j])); j = 1 + j
+ts.plot(principio[[j]], main = (lista_principio[j])); j = 1 + j
+ts.plot(principio[[j]], main = (lista_principio[j])); j = 1 + j
+ts.plot(principio[[j]], main = (lista_principio[j])); j = 1 + j
+ts.plot(principio[[j]], main = (lista_principio[j])); j = 1 + j
+ts.plot(principio[[j]], main = (lista_principio[j])); j = 1 + j
+ts.plot(principio[[j]], main = (lista_principio[j])); j = 1 + j
+ts.plot(principio[[j]], main = (lista_principio[j])); j = 1 + j
 
 # separacion de medicamentos 
 

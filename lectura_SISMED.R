@@ -1,7 +1,18 @@
-
+rm(list = ls())
 # Lectura y selección de bases de datos.
 
-# v 0.3:
+# v 0.4: seleccion de variables necesarias y bases de datos de referencia
+
+# | Referencias:                                 | Base tomada:  |
+# | ---------------------------------------------|---------------|
+# | Cantidades de principio activo y medicamento | FICHA         |
+# | Cantidades de medicamentos vendidos por mes  | SISMED        |
+
+# Consideraciones:
+# - Se tomaron solamente medicamentos vendidos en tableta.
+# - Se hizo join de las bases por variable CUM, ya que muestra varias presentaciones
+# de medicamentos con distintas unidades.
+
 
 # Se seleccionan los datos de la cohorte.
 
@@ -9,7 +20,6 @@
 
 # 1. Cruzar base de datos CUM con SISMED: 6 de 26 medicamentos encontrados (informacion errónea).
 # 2. Base de datos ficha.csv: No se conoce la veracidad de algunas unidades.
-
 
 library(dplyr)
 library(stringr)
@@ -19,8 +29,8 @@ library(readr)
 
 setwd(dirname(rstudioapi::getSourceEditorContext()$path))
 
-principios_activos = read.csv("bases/principios_activos.csv") # Principios activos
-medicamentos_candidatos = read.csv("bases/medicamentos_candidatos.csv") # medicamentos candidatos
+principios_activos = read.csv("bases/principios_activos.csv") # se cargan principios activos
+medicamentos_candidatos = read.csv("bases/medicamentos_candidatos.csv") # se cargan medicamentos candidatos
 
 SISMED = list() # base completa.csv
 FICHA = list()  # base ficha.csv
@@ -42,10 +52,10 @@ for (i in 1:5) {
 }
 
 ################################################################################
-############################ Limpieza y cargado ################################
+########################## limpieza Base SISMED ################################
 ################################################################################
 
-# SISMED - completa
+# normalización de variables 
 
 # Base completa
 SISMED = bind_rows(SISMED)
@@ -70,54 +80,48 @@ names(SISMED) = SISMED %>%
                     'ú' = 'u'))
 
 # Fecha de expedición del medicamento
+
 SISMED = SISMED %>% separate(fecha, into = c("año", "mes", "n_dias"), sep = "-")
-
-
-
 # último día del mes correspondiente
 SISMED$n_dias = lubridate::days_in_month(
   lubridate::make_date(SISMED$año, SISMED$mes, 1)
 )
-
 SISMED$año = as.numeric(SISMED$año)
 SISMED$mes = as.numeric(SISMED$mes)
 
-# selección de años específicos 
-
-# 2017 a 2025
+# filtrado de años: 2017 a 2025
 
 SISMED = SISMED %>% filter(año > 2016, año < 2026)
-
 
 # Estandarizacón de registro sanitario
 
 SISMED = SISMED %>% mutate(principioactivo = str_to_lower(SISMED$principioactivo))
 
 # se procede a revisar cuales datos contienen mediciones para todos los meses
+
 for (u in 1:length(medicamentos_candidatos$principioactivo)) {
-  
   print(medicamentos_candidatos$principioactivo[u])
-  
   tabla = table(
     SISMED$mes[SISMED$principioactivo == medicamentos_candidatos$principioactivo[u]],
     SISMED$año[SISMED$principioactivo == medicamentos_candidatos$principioactivo[u]]
   )
-  
   print(tabla)
   print(sum(tabla == 0))
 }
 
-# selección de principios cantidatos
-SISMED = SISMED %>% filter(principioactivo %in% medicamentos_candidatos$principioactivo)
+# filtrado: principios activos dentro de los candidatos
+SISMED = SISMED %>% 
+  filter(
+    principioactivo %in% medicamentos_candidatos$principioactivo
+    )
 
 # Estandarización de Registro Sanitario 
-
 SISMED = SISMED %>%
   mutate(
     registrosanitario = str_remove_all(registrosanitario, "\\s")
          )
 
-# limpieza manual
+# limpieza manual (en caso de considerarse medicamentos que no estén e tablestas)
 SISMED$concentracion[SISMED$concentracion == "0.001 g/mL"] = "1 mg/mL"
 SISMED$concentracion[SISMED$concentracion == "0.0025 g/mL"] = "2.5 mg/mL"
 SISMED$concentracion[SISMED$concentracion == "0.004 g/mL"] = "4 mg/mL"
@@ -141,7 +145,7 @@ resumen_ml = SISMED_ml %>%
   )
 # View(resumen_ml)
 
-# Selección de variables SISMED
+# Selección de variables SISMED ------------------------------------------------
 
 SISMED = SISMED %>% 
   select(
@@ -161,14 +165,12 @@ SISMED = SISMED %>%
 reg_cum = SISMED %>% 
   select(cum) %>%
   group_by(cum) %>%
-  summarise(n())
+  summarise(n = n()) %>%
+  arrange(desc(n))
 
 ################################################################################
-############################ Limpieza y cargado ################################
+############################ limpieza Base FICHA ###############################
 ################################################################################
-
-# SISMED - ficha
-
 
 FICHA = bind_rows(FICHA)
 
@@ -206,17 +208,21 @@ FICHA = FICHA %>%
 reg_cum2 = FICHA %>% 
   select(cum) %>%
   group_by(cum) %>%
-  summarise(n = n())
+  summarise(n = n()) %>%
+  arrange(desc(n))
 
 reg_cum3 = FICHA %>% 
   group_by(cum) %>%
   filter(umd == "TABLETA") %>%
   select(cum) %>%
-  summarise(n = n())
+  summarise(n = n()) %>%
+  arrange(desc(n))
+
+# correccion de unidades ficha
 
 
 ################################################################################
-############################ Limpieza y cargado ################################
+############################ limpieza Base CUM #################################
 ################################################################################
 
 # CUM
@@ -226,25 +232,24 @@ CUM = read.csv(
   sep = ",",
   dec = ",")
 
-# 
-
-length(table(reg_cum$cum))
+# normalizacion de nombres
 
 CUM = CUM %>% 
-  mutate(
-    principioactivo = str_to_lower(principioactivo)
+  mutate(# normalizcion de nombres
+    principioactivo = str_to_lower(principioactivo) 
     ) %>% 
-  mutate(
+  mutate(# normalizcion de nombres
     descripcionatc = str_to_lower(descripcionatc)
   ) %>%
-  mutate(
+  mutate(# normalizcion de nombres para comparar con base SISMED
     expediente = str_c(expediente, "-1")
   ) %>%
-  mutate(
+  mutate(# normalizacion de nombres
     registrosanitario = str_remove_all(registrosanitario, "\\s")
-    ) %>% filter(expediente %in% reg_cum$cum)
+    ) %>% 
+  filter(expediente %in% reg_cum$cum)  # filtrado de variables de interes
 
-# modificaciones
+# seleccion de nombres
 CUM = CUM %>% 
   select(
     cum = expediente,
@@ -254,8 +259,9 @@ CUM = CUM %>%
     cantidad,
     unidadmedida, principioactivo
     ) %>% 
-  mutate(cantidad_medida = cantidadcum * cantidad)
-
+  mutate( 
+    cantidad_medida = cantidadcum * cantidad
+    )
 
 # selección de principios cantidatos
 
@@ -272,7 +278,8 @@ CUM = CUM %>% filter(principioactivo %in% medicamentos_candidatos$principioactiv
 reg_cum1 = CUM %>% 
   select(cum) %>%
   group_by(cum) %>%
-  summarise(n = n())
+  summarise(n = n()) %>% 
+  arrange(desc(n))
 
 ################################################################################
 ############################## UNIÓN DE BASES ##################################
@@ -286,12 +293,17 @@ length(table(reg_cum1$cum)) # CU
 length(table(reg_cum2$cum)) # FICHA
 length(table(reg_cum3$cum)) # FICHA TABLETAS
 
+# solamente la base FICHA cuenta con todos los registros conocidos
 
 # se tendrán un total de 379 medicamentos (USANDO FICHA Y TABLETAS)
 
-FICHA = FICHA %>% filter(umd == "TABLETA")
-
 SISMED_final = left_join(SISMED, FICHA, by = "cum")
 
+# se seleccionan los medicamentos en presentacion de tableta
+SISMED_final = SISMED_final %>% filter(umd == "TABLETA")
+
+# guardado
 write.csv(SISMED_final, "salidas/base_sismed_final.csv")
+
+rm(list = ls())
 

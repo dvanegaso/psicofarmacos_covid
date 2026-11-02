@@ -19,7 +19,29 @@ library(readr)
 setwd(dirname(rstudioapi::getSourceEditorContext()$path))
 
 medicamentos_candidatos = read.csv("bases/medicamentos_candidatos.csv")[,2]
-BASE_SISMED_DDD_DANE = read.csv("salidas/base_sismed_final.csv")
+
+BASE_SISMED_DDD_DANE = read.csv("salidas/base_sismed_final.csv") %>%
+  select(cum, 
+         atc, 
+         grupoatc,
+         atc5,
+         principioactivo,
+         concentracion,
+         registrosanitario = registrosanitario.x,
+         año,
+         mes,
+         n_dias,
+         unidadescomercial,
+         unidadesinstitucional,
+         activoporumd,
+         umdporunidad
+         ) %>%
+  mutate(
+    cantidad = parse_number(str_extract(concentracion,  "\\d+(\\.\\d+)?\\s*mg"))
+  ) %>% 
+  mutate(
+    activounidad = cantidad * umdporunidad
+  )
 
 DDD = read.csv("diccionarios/DDD.csv", sep = ",", dec = ".") %>% select(ATC_code, Name, DDD, U)
 
@@ -29,9 +51,9 @@ DDD[which(DDD$U == "mmol"),]
 DDD = DDD[(DDD$U != "mmol"),]
 
 # corrección unidades
+
 DDD$DDD[DDD$U == "g"] = DDD$DDD[DDD$U == "g"]*1000 # conversion de unidades
 DDD$U = "mg"
-
 
 # seleccion de activos de interes
 
@@ -45,31 +67,34 @@ DDD = DDD %>%
     DDD = first(DDD))
 
 # bind SISMED con DDD
+
 BASE_SISMED_DDD_DANE = left_join(BASE_SISMED_DDD_DANE, DDD, by = "atc")
 
 # bind SISMED_DDD con PROYECCIONES DANE
 
-proyec_dane = read.csv("diccionarios/proyecciones_dane_2017_2025.csv")
+proyec_dane = read.csv("diccionarios/proyecciones_dane_mensual.csv") %>% 
+  select(
+    indice,
+    fecha,
+    total_poblacional
+    )
 
-BASE_SISMED_DDD_DANE = left_join(BASE_SISMED_DDD_DANE, proyec_dane, by = "año")
+BASE_SISMED_DDD_DANE$indice = (BASE_SISMED_DDD_DANE$año %% 2017) * 12 + BASE_SISMED_DDD_DANE$mes
 
-BASE_SISMED_DDD_DANE$mes_medicion = (BASE_SISMED_DDD_DANE$año %% 2017) * 12 + BASE_SISMED_DDD_DANE$mes
+BASE_SISMED_DDD_DANE = left_join(BASE_SISMED_DDD_DANE, proyec_dane, by = "indice")
 
 # limpieza base
 
 BASE_SISMED_DDD_DANE = BASE_SISMED_DDD_DANE %>%
-  mutate(
-    cantidad = parse_number(str_extract(concentracion,  "\\d+(\\.\\d+)?\\s*mg"))
-  )%>%
   replace_na(list(unidadescomercial = 0, unidadesinstitucional = 0)
   ) %>%
   mutate(
     vendidos_total = unidadescomercial + unidadesinstitucional
   ) %>%
   mutate(
-    mg_vendidos_total = vendidos_total * cantidad,
-    mg_vendidos_inst = unidadesinstitucional * cantidad,
-    mg_vendidos_comm = unidadescomercial * cantidad
+    mg_vendidos_total = vendidos_total * activounidad,
+    mg_vendidos_inst = unidadesinstitucional * activounidad,
+    mg_vendidos_comm = unidadescomercial * activounidad
     ) %>%
   mutate(
     DHD_total = ((mg_vendidos_total / DDD) / (total_poblacional * n_dias)) * 1000,
