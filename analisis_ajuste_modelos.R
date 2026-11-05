@@ -111,8 +111,6 @@ meses = list()
 
 lista_principio = names(table(datos$principioactivo))
 
-library(nlme)
-
 for (i in 1:length(lista_principio)) {
   
   # serializacion de datos (sumando principio activo mensual)
@@ -157,9 +155,12 @@ for (i in 1:length(lista_principio)) {
   }
   
   # control
-  meses[[i]] = summary(principio[[i]]$indice)
+  ts.plot(principio[[i]][,c(2:4)], main = paste(i, lista_principio[i]))
 }
 
+
+
+library(nlme)
 
 modelo = list()
 
@@ -212,9 +213,9 @@ for (i in 1:length(lista_principio)) {
   par(mfrow = c(1,1))
   dev.off()
   
-  # print(summary(modelo_test))
+  print(summary(modelo_test))
   
-
+  
   
   modelo[[i]] = modelo_test
   
