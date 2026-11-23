@@ -47,6 +47,8 @@
 
 rm(list = ls())
 
+setwd(dirname(rstudioapi::getSourceEditorContext()$path))
+
 # install.packages(c("rvest", "xml2"))   # Ejecutar una vez si faltan
 library(rvest)
 library(xml2)
