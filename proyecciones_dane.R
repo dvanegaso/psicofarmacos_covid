@@ -175,7 +175,6 @@ stopifnot(identical(mensual$indice, 1:n_meses_esperado))
 mensual = mensual %>% 
   select(
     indice,
-    fecha,
     total_poblacional
     )
 

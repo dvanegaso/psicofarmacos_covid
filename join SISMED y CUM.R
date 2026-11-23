@@ -3,8 +3,6 @@ rm(list = ls())
 
 # v 0.4: seleccion de variables necesarias y bases de datos de referencia
 
-# Este codigo solamente selecciona 
-
 # | Referencias:                                 | Base tomada:  |
 # | ---------------------------------------------|---------------|
 # | Cantidades de principio activo y medicamento | FICHA         |
@@ -99,13 +97,53 @@ SISMED = SISMED %>% filter(año > 2016, año < 2026)
 
 SISMED = SISMED %>% mutate(principioactivo = str_to_lower(SISMED$principioactivo))
 
+# se procede a revisar cuales datos contienen mediciones para todos los meses
+
+for (u in 1:length(medicamentos_candidatos$principioactivo)) {
+  print(medicamentos_candidatos$principioactivo[u])
+  tabla = table(
+    SISMED$mes[SISMED$principioactivo == medicamentos_candidatos$principioactivo[u]],
+    SISMED$año[SISMED$principioactivo == medicamentos_candidatos$principioactivo[u]]
+  )
+  print(tabla)
+  print(sum(tabla == 0))
+}
+
 # filtrado: principios activos dentro de los candidatos
 SISMED = SISMED %>% 
   filter(
-    atc %in% medicamentos_candidatos$ATC_code
+    principioactivo %in% medicamentos_candidatos$principioactivo
     )
 
+# Estandarización de Registro Sanitario 
+SISMED = SISMED %>%
+  mutate(
+    registrosanitario = str_remove_all(registrosanitario, "\\s")
+         )
 
+# limpieza manual (en caso de considerarse medicamentos que no estén e tablestas)
+SISMED$concentracion[SISMED$concentracion == "0.001 g/mL"] = "1 mg/mL"
+SISMED$concentracion[SISMED$concentracion == "0.0025 g/mL"] = "2.5 mg/mL"
+SISMED$concentracion[SISMED$concentracion == "0.004 g/mL"] = "4 mg/mL"
+
+# seleccion de unidades a verificar
+
+SISMED_ml = SISMED %>% filter(str_detect(concentracion, "mg/mL"))
+SISMED_gr = anti_join(SISMED, SISMED_ml)
+
+# visualizar las tablas faltantes
+
+resumen_ml = SISMED_ml %>% 
+  group_by(
+    registrosanitario
+    ) %>% 
+  summarise(
+    formafarmaceutica = first(formafarmaceutica),
+    producto = first(producto),
+    titular = first(titular),
+    principioactivo = first(principioactivo)
+  )
+# View(resumen_ml)
 
 # Selección de variables SISMED ------------------------------------------------
 
@@ -124,6 +162,11 @@ SISMED = SISMED %>%
     unidadesinstitucional
     )
 
+reg_cum = SISMED %>% 
+  select(cum) %>%
+  group_by(cum) %>%
+  summarise(n = n()) %>%
+  arrange(desc(n))
 
 ################################################################################
 ############################ limpieza Base FICHA ###############################
@@ -131,7 +174,6 @@ SISMED = SISMED %>%
 
 FICHA = bind_rows(FICHA)
 
-# limpieza de nombres --------------------
 names(FICHA) = FICHA %>% 
   names() %>%
   str_replace_all("\\_","") %>% 
@@ -147,11 +189,12 @@ FICHA = FICHA %>%
   mutate(
     registrosanitario = str_remove_all(registrosanitario, "\\s")
     )
-# seleccion de variables
+
 FICHA = FICHA %>%
   mutate(
     registrosanitario = str_remove_all(registrosanitario, "\\s")
-  ) %>% 
+  ) %>%
+  filter(cum %in% reg_cum$cum) %>%
   select(
     cum,
     atc5,
@@ -162,13 +205,27 @@ FICHA = FICHA %>%
     umd, producto
     )
 
+reg_cum2 = FICHA %>% 
+  select(cum) %>%
+  group_by(cum) %>%
+  summarise(n = n()) %>%
+  arrange(desc(n))
+
+reg_cum3 = FICHA %>% 
+  group_by(cum) %>%
+  filter(umd == "TABLETA") %>%
+  select(cum) %>%
+  summarise(n = n()) %>%
+  arrange(desc(n))
+
+# correccion de unidades ficha
+
 
 ################################################################################
 ############################ limpieza Base CUM #################################
 ################################################################################
 
-# CUM: Esta variable no va a funcionar, las llaves CUM necesarias para JOIN no 
-# son únicas en la base CUM.
+# CUM
 
 CUM = read.csv(
   "bases/CÓDIGO_ÚNICO_DE_MEDICAMENTOS_VIGENTES_20261025.csv",
@@ -183,8 +240,14 @@ CUM = CUM %>%
     ) %>% 
   mutate(# normalizcion de nombres
     descripcionatc = str_to_lower(descripcionatc)
-  ) %>% 
-  filter(atc %in% medicamentos_candidatos$ATC_code)  # filtrado de variables de interes
+  ) %>%
+  mutate(# normalizcion de nombres para comparar con base SISMED
+    expediente = str_c(expediente, "-1")
+  ) %>%
+  mutate(# normalizacion de nombres
+    registrosanitario = str_remove_all(registrosanitario, "\\s")
+    ) %>% 
+  filter(expediente %in% reg_cum$cum)  # filtrado de variables de interes
 
 # seleccion de nombres
 CUM = CUM %>% 
@@ -194,19 +257,16 @@ CUM = CUM %>%
     unidadmedida, 
     cantidadcum,
     cantidad,
-    atc,
     unidadmedida, principioactivo
     ) %>% 
   mutate( 
     cantidad_medida = cantidadcum * cantidad
     )
 
-SISMED_cum = SISMED %>% mutate(expediente = str_remove(cum, "-."))
-
-
 # selección de principios cantidatos
 
-CUM = CUM %>% group_by(cum) %>%
+CUM = CUM %>% group_by(cum)
+CUM = CUM %>% filter(principioactivo %in% medicamentos_candidatos$principioactivo) %>%
   group_by(cum) %>%
   summarise(
     principioactivo = first(principioactivo),
@@ -215,12 +275,23 @@ CUM = CUM %>% group_by(cum) %>%
     .groups = "drop"
   ) %>% select(cum, unidadmedida, cantidad)
 
+reg_cum1 = CUM %>% 
+  select(cum) %>%
+  group_by(cum) %>%
+  summarise(n = n()) %>% 
+  arrange(desc(n))
 
 ################################################################################
 ############################## UNIÓN DE BASES ##################################
 ################################################################################
 
 # se selecciona la base mas completa con medicamentos en tabletas
+
+# la base FICHA es la única con todos los datos
+length(table(reg_cum$cum))
+length(table(reg_cum1$cum)) # CU
+length(table(reg_cum2$cum)) # FICHA
+length(table(reg_cum3$cum)) # FICHA TABLETAS
 
 # solamente la base FICHA cuenta con todos los registros conocidos
 
@@ -229,27 +300,10 @@ CUM = CUM %>% group_by(cum) %>%
 SISMED_final = left_join(SISMED, FICHA, by = "cum")
 
 # se seleccionan los medicamentos en presentacion de tableta
-
-SISMED_final$umdporunidad[SISMED_final$unidadactivo == "g"] = 1000 * SISMED_final$umdporunidad[SISMED_final$unidadactivo == "g"]
-
-# se procede a revisar cuales datos contienen mediciones para todos los meses
-
-# esto incluye tanto uso institucional como comercial
-
-for (u in 1:length(medicamentos_candidatos$Name)) {
-  print(medicamentos_candidatos$principioactivo[u])
-  tabla = table(
-    SISMED_final$mes[SISMED_final$principioactivo == medicamentos_candidatos$Name[u]],
-    SISMED_final$año[SISMED_final$principioactivo == medicamentos_candidatos$Name[u]]
-  )
-  cat("---------------------", medicamentos_candidatos$Name[u], "---------------------")
-  print(tabla)
-  print(sum(tabla == 0))
-  
-}
+SISMED_final = SISMED_final %>% filter(umd == "TABLETA")
 
 # guardado
 write.csv(SISMED_final, "salidas/base_sismed_final.csv")
 
 rm(list = ls())
-  
+

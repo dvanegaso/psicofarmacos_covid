@@ -1,8 +1,4 @@
 
-rm(list = ls())
-
-library(tidyverse)
-
 setwd(dirname(rstudioapi::getSourceEditorContext()$path))
 
 # Principios activos (en código WHO)
@@ -18,7 +14,7 @@ principios_activos = c(
 # principios activos (en nombre comercial)
 
 medicamentos_candidatos = data.frame(
-  Name = c(
+  principioactivo = c(
     
     # Antidepresivos
     "sertraline",
@@ -26,7 +22,7 @@ medicamentos_candidatos = data.frame(
     "escitalopram",
     "trazodone", # no está
     "vortioxetine",
-    "amitriptyline", 
+    "amitriptiline", # no está
     
     # Ansiolíticos benzodiazepínicos
     "alprazolam", 
@@ -52,16 +48,5 @@ medicamentos_candidatos = data.frame(
   )
 )
 
-
-medicamentos_candidatos = dplyr::left_join(
-  medicamentos_candidatos,
-  read.csv("diccionarios/DDD.csv"),
-  by = "Name") %>%
-  select(Name, ATC_code) %>%
-  group_by(Name) %>% 
-  summarise(ATC_code = first(ATC_code))
-
 write.csv(principios_activos, "bases/principios_activos.csv")
 write.csv(medicamentos_candidatos, "bases/medicamentos_candidatos.csv")
-
-rm(list = ls())
