@@ -1,0 +1,932 @@
+\documentclass[10pt,twoside,xcolor=table,x11anmes]{IEEEtran}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% PAQUETES DE ESCRITURA %%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{latexsym}
+\usepackage{wasysym}
+\usepackage{array}
+\usepackage{marvosym}
+\usepackage{dsfont}
+\usepackage{textcomp}
+\usepackage{anyfontsize}
+\usepackage{setspace}
+\usepackage[shortlabels]{enumitem}
+\usepackage{lipsum}
+\usepackage{multicol}
+\usepackage{paracol}
+\usepackage[many]{tcolorbox}
+\usepackage{marginnote}
+\usepackage{parskip}
+\usepackage{hyperref}
+\usepackage{hanging} 
+\usepackage{booktabs}
+\usepackage{pifont}
+\usepackage{titlesec}
+\usepackage{etoolbox}
+\usepackage{lettrine}
+\usepackage{scalefnt}
+\usepackage[letterspace=150]{microtype}
+\usepackage{minted}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% PAQUETES DE FORMATO %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\usepackage{fancyhdr}
+\usepackage[paperwidth=216mm,paperheight=279mm,left=2cm,right=2cm,top=2cm,bottom=2cm, marginparwidth=14mm,marginparsep=3mm]{geometry} % Tamaño carta colombiano
+\setlength{\headheight}{26.22636pt}
+%Para eliminar la numeración de las páginas: \pagestyle{empty}
+%Para el interlineado: \usepackage{setspace}
+%Para interlineado doble (2.0) en todo el documento: \doublespacing
+%Para interlineado de espacio y medio (1.5) en todo el documento: \onehalfspace
+%Para mantener el interlineado estándar después de una modificación en el interlineado: \singlespace
+%Para controlar la medida del interlineado en todo el documento: \spacing{x.x}
+\setlength{\parindent}{0.5cm}
+%Para mantener el documento sin sangría después de una modificación en la sangría: \setlength{\parindent}{0cm} 
+\setlength{\parskip}{0cm}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% PAQUETES DE GRÁFICOS %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\usepackage{epsfig}
+\usepackage{graphicx}
+\usepackage{caption}
+\captionsetup[figure]{format=plain, font={footnotesize, stretch=.85}, labelfont=sc, labelsep=period, singlelinecheck=true, belowskip=-3mm, skip=2mm}
+\usepackage{float}
+\usepackage{subfigure}
+\usepackage{tikz}
+\usetikzlibrary{positioning, shapes.misc}
+\usetikzlibrary{calc,arrows,babel}
+\usepackage{calc}
+\usepackage{keyval}
+\usepackage{ifvtex}
+\usepackage{xcolor}
+\usepackage{pstricks}
+\usepackage{wrapfig}
+\usepackage{transparent}
+\usepackage{makecell}
+\usepackage{eso-pic}
+\usepackage{titleps}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% PAQUETES DE TABLAS %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\usepackage{multirow}
+\usepackage{booktabs}
+\usepackage{longtable}
+\usepackage{rotating}
+\captionsetup[table]{format=plain, font={footnotesize, stretch=.85}, labelfont=sc, labelsep=period, singlelinecheck=true, belowskip=-3mm, skip=2mm}
+\renewcommand{\thetable}{\arabic{table}}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% PAQUETES DE MATEMÁTICAS %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\usepackage{mathrsfs}
+\usepackage{mathtools}
+\usepackage{cancel}
+\def\max{\mathop{\mbox{\rm máx}}} %máximo
+\def\min{\mathop{\mbox{\rm mín}}} %mínimo
+\usepackage{esvect}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% NEW COMMANDS %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\newcommand{\singlequotes}[1]{‘{#1}’} %Comillas simples
+\newcommand{\emdashed}[1]{\textemdash{#1}\textemdash} %Em dash
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% ENUMERACIÓN %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%Para modificar la enumeración del primer nivel: \renewcommand{\labelenumi}{código{enumi}}
+%Para modificar la enumeración del segundo nivel: \renewcommand{\labelenumii}{código{enumii}} % etc.
+%Para modificar la itemización del primer nivel: \renewcommand{\labelitemi}{código}
+%Códigos de enumeración: \alph (a,b,c); \Alph (A,B,C); \arabic (1,2,3); \roman (i,ii,iii); \Roman (I,II,III).
+%Códigos de itemización: \textbullet (•); \textendash (-); \textasteriskcentered (*); \textperiodcentered (‧); 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% CUERPO %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%Para mostrar en el documento las áreas de texto:
+%\usepackage{showframe}
+
+\title{\vspace{10mm} Análisis con Series de Tiempo sobre fecto de los confinamientos por COVID-19 sobre el consumo de psicofármacos en Colombia}
+\author{
+	{\fontsize{13}{15.6}\selectfont Daniel Mauricio Vanegas Oliveros*}\\
+	\vspace{1mm}\small{dvanegaso@unal.edu.co}\\
+
+	\vspace{5mm}\normalsize\textit{*Departamento de Estadística, Facultad de Ciencias, Universidad Nacional de Colombia}\\
+	\vspace{5mm} 07 de mayo de 2026
+}
+
+
+\newpagestyle{main}{
+	\sethead[\large\thepage][\textsc{\lsstyle Efecto de los confinamientos por COVID-19 sobre el consumo de psicofármacos en Colombia: análisis de series de tiempo interrumpidas con datos SISMED, 2017–2022}][] % pp. pares
+	{}{\textsc{\lsstyle\sectiontitle}}{\large\thepage}} % pp. impares
+\pagestyle{main}
+
+\begin{document}
+
+\maketitle
+\thispagestyle{empty}
+
+\vspace{65mm}
+
+\noindent \begin{abstract}
+
+Mental health is a topic which in the last years has increased it's importance on public discussion,thus raising the awareness about it's effects on out daily living; in turn, psychofarmaceuticals play a key role on the treatment for conditions related with this clinical framework. Given Colombia has presented an increasing suceptibility to this kind of conditions, plus the COVID-19 pandemic --wchich like previous epidemic events subject to confinement, has brought to a generalized mental health deterioriation-- it is considered neccesary to make a tracing upon medication demand by colombian population. Supported by increasingly used measuers for comparing medicine consumption between populations, this labor is realized through dynamic regression models supported by interrupted time series, which aim to identify the effect of some particular phenomena occurred through the time measurement period.
+
+\end{abstract}
+
+\section[Introducción]{Introducción}
+
+La salud mental es un tópico que en los últimos años se ha vuelto más y mas recurrente en la discusión pública, cada vez se conscientiza mas a la población sobre los efectos de la misma sobre nuestro diario vivir; a su vez, los psicofármacos juegan un papel fundamental en el tratamiento de condiciones relacionadas a estos marcos clínicos. Por otro lado, la pandemia de COVID tuvo un efecto significativo en la salud mental de todas las personas expuestas al confinamiento. Con el fin de revisar sus efectos, en el presente trabajo se ha realizado una investigación sobre el impacto de los múltiples eventos que se desarrollaron durante la pandemia de COVID y su efecto en el consumo a nivel nacional de psicofármacos por medio del ajuste de modelamiento retrospectivo de las series. Los resultados entre los  fármacos revisados fueron distintos, donde algunos presentaron aumentos significativos en su consumo, así como otros no percibieron cambios respecto a series contrafactuales. De las conclusiones se sugiere que hubo una variacion particular dependiendo del tipo de fármaco al que pertenece.
+
+\section[Planteamiento y Pregunta de Investigación]{Planteamiento y Pregunta de Investigación}
+
+Durante la pandemia de COVID-19 se presentó el aislamiento obligatorio a nivel nacional entre el 25 de marzo y el 31 de agosto de 2020. Dentro de las hipótesis tomadas en cuenta desde la introducción, se sugiere que la cantidad de medicamentos ofertados se vio cambiada, fuera de su oferta habitual, por el mismo aislamiento obligatorio. 
+
+Dentro de las revisiones previamente realizadas, se encuentra la tesis de maestría de Prieto 2023, que realiza una revisión de las series temporales en intervalos trimestrales; no se cuentan con revisiones mensuales sobre los fenómenos a investigar. 
+
+De aquí nace la pregunta: ¿el aislamiento preventivo obligatorio por COVID-19 generó un cambio en el consumo de psicofármacos en Colombia? 
+
+\subsection{Objetivo General}
+
+Estimar el efecto del aislamiento preventivo obligatorio por COVID-19 sobre el nivel y la tendencia del consumo de psicofármacos en Colombia, por medio de series de tiempo con datos mensuales de SISMED entre 2017 y 2025 correspondientes a mediciones del consumo de distintos psicofármacos ofertados por canales institucional y comercial.
+
+\subsection{Objetivos Específicos}
+
+Para dar respuesta a la pregunta anterior, se plantean los siguientes objetivos específicos:
+
+\begin{enumerate}
+    \item \textbf{Construir} la serie mensual de $DHD_t$ por grupo ATC y por principio activo, a partir de las bases SISMED, CUM, DDD y las proyecciones del DANE.
+    \item \textbf{Describir} la tendencia y la estacionalidad del consumo antes de marzo de 2020, que es el periodo de referencia para el contrafactual.
+    \item \textbf{Estimar} el cambio de nivel y de pendiente asociado al aislamiento obligatorio y al aislamiento selectivo, por medio de una regresión segmentada con errores ARMA.
+    \item \textbf{Calcular} el contrafactual de cada serie, con sus intervalos de confianza, a 6, 12 y 24 meses del inicio del aislamiento.
+    \item \textbf{Validar} los resultados por medio de modelos ARIMA con intervención y de una serie control no psiquiátrica.
+    \item \textbf{Comparar} los hallazgos con los de Prieto (2023), tomando en cuenta que su trabajo usa datos trimestrales del canal institucional.
+    \item \textbf{Evaluar} la robustez de los resultados ante la fecha de corte, el canal de venta y el desabastecimiento de medicamentos de 2023 y 2024.
+\end{enumerate}
+
+\subsection{Hipótesis}
+
+Dentro de este estudio se plantean las siguientes hipótesis:
+
+\begin{itemize}
+    \item $H_0$: El aislamiento preventivo obligatorio no cambió el nivel ni la pendiente del consumo de psicofármacos.
+    \item $H_1$: El aislamiento preventivo obligatorio cambió el nivel, la pendiente o ambos.
+\end{itemize}
+
+A su vez, estas hipótesis se contrastan para cada grupo ATC y para cada principio activo, con corrección por comparaciones múltiples.
+
+\section{Estado del Arte}
+
+Ante este interés existe ya una metodología aplicada previamente para revisar la cantidad de fármaco demandado por diversas poblaciones, que es la presente a continuación:
+
+\begin{equation}
+    DHD_t = \left[ \frac{mg_t / DDD}{p_t d_t} \right] \times 1000
+\end{equation}
+
+Donde:
+
+\begin{itemize}
+    \item $DHD_t$ = Dosis Habitante Definida por mes.
+    \item $mg_t$: Miligramos de principio activo vendidos por mes.
+    \item $DDD$: Dosis Diaria Definida por la Organización Mundial de la Salud.
+    \item $p_t$: Total poblacional en un mes.
+    \item $d_t$: Total de días por mes.
+\end{itemize}
+
+En estudios farmacológicos se hace uso de estas medidas. En primer lugar la Dosis Diaria Definida corresponde, según la OMS(referencia), a la dosis media de principio activo consumida diariamente por un paciente. No es una dosis recomendada, sino una unidad de medida comparativa de consumo asignada a su respectivo principio activo. De la mano con la anterior la Dosis Habitante Diaria $DHD_t$ es la cantidad de DDD consumidas por 1000 habitantes cada día, medida que ya permite realizar comparaciones generales entre ciudades o unidades de tiempo, como es este caso.
+
+En Colombia ya se han realizado trabajos relacionados con estas mediciones, como con Del Castillo LC, Osorio L (2026) que revisaban el efecto de la pandemia en la venta de medicamentos, a su vez que Castro Espinosa et al. (2016) identificaron agrupamientos temporales y locales en los que resaltaba tambien el consumo de antibioticos en la ciudad de Cali.
+
+Mas precisamente sobre el consumo de psicofármacos relacionados con la pandemia de COVID, se encuentra el trabajo de Prieto A. (2023), en el que se hace uso de series de tiempo interrumpidas para el modelamiento de ventas trimestrales en ventas de psicofármacos. De esta tesis de maestría se toma referencia sobre la veracidad de los resultados, en los quye se encuentran moléculas que si presentaron cambios en sus ventas.
+
+Lo esperado dentro de este estudio es ver, por medio de un modelo de regresión dinámica, soportado por otro análisis de series de tiempo interrumpidas, la presencia de factores significativos en las ventas de medicamentos; siendo estos los efectospor confinamiento, y de paso manejar una corrección por desabastecimiento entre 2023 y 2024.
+
+Para realizar seguimiento de las ventas mensuales de cada medicamento y construir la variable de interés se va a hacer uso de la base SISMED, que incluye uso institucional y comercial; por otro lado, para revisar la cantidad de principio activo (que es el que surte efecto en la persona) se hará uso de la base CUM del INVIMA, en la que se especifican ambos principio activo como unidades de medicamento vendidas.
+
+Los eventos identificados dentro de la cohorte que pueden representar un cambio significativo en la serie son:
+
+\begin{itemize}
+    \item Impacto directo del confinamiento entre meses de marzo y abril de 2020, donde se vendría presentando un crecimiento previo a la pandemia de COVID.
+    \item Cambio en la tendencia de la serie, contemporáneo a los meses de confinamiento.
+    \item Desabastecimiento de medicamentos presentado en el año 2023.
+\end{itemize}
+
+Estos eventos serán tomados en cuenta para el modelamiento de las series con las metodologías mostradas en el marco teórico.
+
+\section[Marco Teórico]{Marco Teórico}
+
+Dentro del marco para analizar datos temporales se toman en cuenta las siguientes dos metodologías con las que se puede modelar los eventos que pudieron tener un evento significativo en este intervalo de tiempo. 
+
+Por un lado, de manera inicial, se propone un modelo de regresión dinámica, en el que desde su misma formulación se puede incorporar posibles efectos (pandemia y desabastecimiento). Por otro lado, se manejarán series de tiempo estacionalizadas (modelos ARIMA) con intervención.
+
+\subsection[Series Temporales]{Series Temporales}
+
+Las series de tiempo con el marco mas apropiado para revisar datos temporales. La construcción de este concepto tomada a continuación es tomada tanto de Wei como de Montgomery .Se define una \textbf{serie de tiempo} como un proceso estocástico $ \{Y_t:t\in\mathbb{Z}\}$ en tiempo discreto, al que se le dotan los momentos:
+
+\begin{itemize}
+    \item $E(Y_t)=\mu_t$: Media.
+    \item $Var(Y_t) = \sigma^2_t $ Varianza.
+    \item $\gamma(t,s) = \text{Cov}(Y_t, Y_s)$: Autocovarianza.
+    \item $\rho(t,s) = \frac{\gamma(t,s)}{\sqrt{\text{Var}(Y_t) \text{Var}(Y_s)}}$: Autocorrelación.
+\end{itemize}
+
+Y cuya estructura puede tener varias propiedades como \textbf{estacionariedad}, \textbf{estacionariedad débil}, \textbf{estacionariedad de segundo orden} y demás. Paulatinamente se irá dotando al proceso de mas características necesarias para permitir su estimación. 
+
+\subsubsection{Estacionariedad}
+
+Consiste en que la distribución del proceso es invariante ante traslaciones temporales, es decir:
+
+$F(Y_{t_1},Y_{t_2},\dots,Y_{t_k})=F(Y_{t_1 + h},Y_{t_2 + h},\dots,Y_{t_k + h})$
+
+Para cualquier $h\in \mathbb{Z}$. Probar esta propiedad suele ser complicado, por lo que se define la \textbf{estacionariedad débil}.
+
+\subsubsection{Estacionariedad de Segundo Orden}
+
+Para construir los modelos de series temporales usados en este trabajo se definirá el  concepto de estacionariedad débil, que debe cumplir las siguientes propiedades:
+
+\begin{itemize}
+    \item $E(Y_t)=\mu$: Media constante.
+    \item $Var(Y_t) = \sigma^2 <\infty$ Varianza constante.
+    \item $\gamma(t, t+h) = \gamma(h)$: La autocovarianza depende únicamente del rezago.
+\end{itemize}
+
+\begin{equation*}
+    \begin{split}
+        E(Y_t)&=\mu\\
+        Var(Y_t) &= \sigma^2 <\infty\\
+        \gamma(t, t+h) &= \gamma(h)\\
+    \end{split}
+\end{equation*}
+
+Y cuya autocorrelación se define como $\rho(h) = \frac{\gamma(h)}{\gamma(0)}$. A su vez, para introducir los siguientes tópicos, se maneja el operador de rezago $B$:
+
+$$B^kY_t = Y_{t - k}$$
+
+Con el que se construye también el operador $\nabla$:
+
+$$\nabla = 1-B\quad\therefore\quad\nabla Y_t =Y_t - Y_{t-1}$$
+
+\subsubsection{Ruido Blanco}
+
+Se define un proceso $\varepsilon_t$ como un \textbf{Ruido Blanco} a todo aquel que cumpla las siguientes propiedades:
+
+\begin{itemize}
+    \item $E(\varepsilon_t) = 0$: Media constante y nula.
+    \item $\text{Var}(\varepsilon_t)=\sigma^2$: Varianza constante.
+    \item $\text{Cov}(\varepsilon_t, \varepsilon_s) = 0, t\neq s$: Covarianza nula entre \textbf{ruidos} distintos.
+\end{itemize}
+
+\begin{equation*}
+    \begin{split}
+         E(\varepsilon_t) &= 0\\
+         \text{Var}(\varepsilon_t)&=\sigma^2\\
+         \text{Cov}(\varepsilon_t, \varepsilon_s) &= 0, t\neq s\\
+    \end{split}
+\end{equation*}
+
+Este servirá para construir los modelos a continuación:
+
+\subsubsection{AR: Modelo Auto-Regressive}
+
+Un modelo \textbf{auto-regresivo}, es aquél cuya definición del proceso $Y_t$ se puede describir en términos rezagados de sí mismo:
+
+$$Y_t = c + \phi_1 Y_{t-1} +\phi_2 Y_{t-2}+\dots+ \phi_p Y_{t-p} + \varepsilon_t$$
+
+Donde $c$ es una constante y $\varepsilon\sim \text{RB}(0,\sigma^2)$. Su notación compacta (en términos del operador rezado) es:
+
+$$\phi(B)Y_t = c+\varepsilon_t$$
+
+Donde $\phi(B) = 1 - B^1 - B^2-\dots -B^p$.
+
+\subsubsection{MA: Moving Average}
+
+Un modelo de \textbf{medias móviles} es aquél que se define en términos de los "choques" (términos de ruido blanco) en la memoria del proceso:
+
+$$Y_t = \mu + \theta_{1}\varepsilon_{t-1}+\theta_{2}\varepsilon_{t-2}+\dots+\theta_{q}\varepsilon_{t-q} + \varepsilon_t$$
+
+Que también se puede escribir en su notación compacta:
+
+$$Y_t = \theta(B)\varepsilon_t+\mu$$
+
+En la que $\theta(B)=1 + B + B^2 +\dots+ B^q$.
+
+\subsubsection{ARMA: Auto-Regressive Moving Average}
+
+Este modelo describe el proceso tanto en términos previos de la misma variable $Y_s$ como en ruidos del histórico $e_s$. Su notación compacta es:
+
+$$\phi(B)Y_t = c + \theta(B)\varepsilon_t$$
+
+Definido como un $ARMA(p,q)$. Este modelo suele presentar varios problemas; exige estacionariedad e invertibilidad, algo presente en pocas series temporales. 
+
+\subsubsection{Diferenciación}
+
+Las series temporales comúnmente no son estacionarias y por tanto, los modelos anteriores pueden fallar en sus métodos de estimación. Se puede presentar que una serie de tiempo no sea estacionaria por motivos como:
+
+\begin{itemize}
+    \item La media no es constante pero cuenta con un componente determinístico. Un ejemplo de ello son los modelos de regresión, en los que una covariable puede ser el tiempo.
+    \item Heterocedasticidad: La varianza no es constante; opciones para ello son aplicar transformaciones como logaritmo o utilizar covariables para explicar la varianza.
+    \item Se presenta una raíz unitaria en el polinomio $\phi(B)$.
+\end{itemize}
+
+Para ello, se ha definido el operador diferencia:
+
+$$\nabla=(1-B)$$
+
+Los procesos $\nabla Y_t$ con media 0 y semivarianza finita son definidos como procesos de \textbf{estacionariedad intrínseca}.
+
+\subsubsection{ARIMA: Auto-Regressive Integrated Moving Average}
+
+Para esta última se procede con una diferenciación, aplicando el operador $\nabla$ una o varias veces (preferencialmente solo una). De esta manera, se define el siguiente modelo:
+
+$$\phi(B)\nabla^{d}Y_t=c + \theta(B)\varepsilon_t$$
+
+Definido como un $ARIMA(p,d,q)$, con $d$ siendo la cantidad de diferenciaciones realizadas al proceso. Este acercamiento ya permite dotar de estacionariedad a series que previamente no serian estacionarias.
+
+\subsubsection{SARIMA: Seasonal-ARIMA}
+
+Varias series temporales, a la hora de ser graficadas, muestran comportamientos cíclicos. Ante este tipo de fenómenos se puede definir con la notación anterior el siguiente modelo \textbf{ARIMA Estacional}:
+
+$$\Phi_P(B^s)\phi_p(B)\nabla_s^{D}\nabla^{d}Y_t=c + \Theta_Q(B^s)\theta_q(B)\varepsilon_t$$
+
+Donde:
+
+\begin{equation*}
+    \begin{split}
+        \Phi_P(B^s)&=1-B^{s}-B^{2s}-\dots-B^{Ps}\\
+        \nabla_s^{D}&=(1-B^s)^D\\
+        \Theta_Q(B^s)&=1+B^{s}+B^{2s}+\dots+B^{Qs}\\
+    \end{split}
+\end{equation*}
+
+Cada uno de estos términos capturan la estructura estacional cuya duración son $s$ tiempos. Un ejemplo son las series mensuales que pueden presentar comportamiento estacional, como el desempleo en colombia (ctar al DANE).
+
+De todas formas, estas series temporales no logran capturar eventos particulares dentro de la serie, como aumentos repentinos, cambios de pendiente y en particular exigen linealidad (referenciar ARIMA), por lo que se pueden presentar limitaciones metodológicas importantes. Para suplir estas problemáticas, se incorpora un análisis de validación de modelos bajo series \textbf{SARIMA con Intervención}.
+
+\subsection[ARIMA con Intervención]{ARIMA con Intervención}
+
+Pueden existir casos en los que es necesario agregar dentro de la estimación e inferencia fenómenos externos a la dinámica de la serie. Para ello, se consderan las siguientes funciones:
+
+\begin{itemize}
+    \item \textbf{Step:} En casos en los que se presenta un incremento específico, como para nuestro caso, la entrada al mercado de un medicamento, se considera la función de step, definida de la siguiente manera:\begin{equation}
+  P_t^{(T)} =
+  \begin{cases}
+    1 & t = T \\
+    0 & t \neq T
+  \end{cases}
+\end{equation}
+
+\item \textbf{Pulse:} \begin{equation}
+  S_t^{(T)} =
+  \begin{cases}
+    0 & t < T \\
+    1 & t \geq T
+  \end{cases}
+\end{equation}
+
+\item \textbf{Ramp:} Induce un crecimiento lineal desde el tiempo $T$.
+
+\begin{equation}
+  R_t^{(T)} =
+  \begin{cases}
+    0 & t < T \\
+    t - T + 1 & t \geq T
+  \end{cases}
+\end{equation}
+\end{itemize}
+
+\subsubsection{Función de Transferencia}
+
+\begin{equation}
+  Y_t = \sum_{j=1}^{m} \frac{\omega_j(B)}{\delta_j(B)}\, B^{b_j}\, I_{j,t} + N_t
+\end{equation}
+
+\subsubsection{Modelos de Múltiples Intervenciones}
+
+\begin{equation}
+  Y_t = \sum_{j=1}^{m} \frac{\omega_j(B)}{\delta_j(B)}\, B^{b_j}\, I_{j,t} + N_t
+\end{equation}
+
+\subsection[Modelos de Regresión Dinámica]{Modelos de Regresión Dinámica}
+
+Otra alternativa que se puede aplicar en estudios retrospectivos como el presente, es modelar el valor esperado de la variable respuesta con regresores dependientes del tiempo. 
+
+La aplicación de estos modelos para analizar series temporales había sido previamente aplicada desde ClinPharmTherap2002, de donde se extrae la metodología aplicada en este estudio. La construccion del modelo se encuentra mas adelante, junto con sus covariables explicativas.
+
+En estos se deberá tomar en cuenta la autocorrelación de los errores, para ello se presentan dos añternativas; los residuales con estructura \textbf{ARMA} y la metodología de \textbf{Newey-West}, dota de robustez ante autocorrelación de errores y heterocedasticidad a las inferencias de los regresores lineales.
+
+\subsubsection{Regresión con Residuales ARMA}
+
+Para ello definimos el modelo:
+
+$$Y=X\beta + \eta \quad\text{donde:}\quad \eta\sim N(0,\Omega)$$
+
+Donde $\Omega$ es una matriz definida positiva que captura la estructura de auto-correlación de los errores. Es de hacerse notar que esta escritura del modelo implica que previamente se ha demostrado que el proceso $\eta_t$ es estacionario, ya que ello garantiza una representación $MA(\infty)$ por ().
+
+Continuando con la definición, al realizar una minimización por mínimos cuadrados de $\beta$ se encuentra la forma:
+
+$$\hat{\beta}_{MCG}=\left(X^{t}\Omega^{-1}X\right)^{-1}\Omega^{-1}Y$$
+
+\subsubsection{Errores Estándar 
+Newey-West}
+
+Esta metodología busca construir una estimación de $\text{Var}(\beta)$ robusta a la autocorrelación y a la heterocedasticidad. Según Cottrell, A., \& Lucchetti, R. (2026), el estimador \textit{Sandwich} se construye de la forma:
+
+$$\widehat{\text{Var}}(\hat{\beta})= (X^{t}X)^{-1} \hat{S}(X^{t}X)^{-1}$$
+
+Donde:
+
+\begin{equation*}
+    \begin{split}
+         \hat{S}&=\hat{\Gamma}_0 +\sum_{\ell=1}^{L}w_{\ell}(\hat{\Gamma}_\ell + \hat{\Gamma}_{\ell}^t)\\
+         \hat{\Gamma}_\ell&=\sum_{t=\ell+1}^{T}\hat{\varepsilon}_{t}\hat{\varepsilon}_{t-\ell}x_t x_{t-\ell}^{t}
+    \end{split}
+\end{equation*}
+
+A este estimador se le llama estimador HAC: (\textit{heteroskedasticity and autocorrelation consistent}). Para garantizar que $\hat{S}$ sea definida positiva, se deben tener en cuenta los pesos de Bartlett:
+
+$$w_\ell=1 - \frac{\ell}{L+1}$$
+
+Donde $L$ es un parámetro de ancho de banda, cuyo valor recomendado es:
+
+$$L=\left\lfloor 4\left(\frac{T}{100}\right)^{\frac{2}{9}}\right\rfloor $$
+
+Con esto, se procede a especificar cómo se incorporaron los modelos con las mediciones de $DHD_t$:
+
+\subsection{Modelo Aplicado: Regresión Dinámica}
+
+Se propone el siguiente modelo para revisar la tendencia de medicamentos:
+
+\begin{equation*}
+    \begin{split}
+        \log\left(DHD_t\right)  =& \beta_0 + \beta_1 t + \beta_2 D_{1t} + \beta_3 D_{2t} + \\
+        &\beta_4 (t - T_2) D_{2t} + \sum_{m}\gamma_{m}M_{mt} + \varepsilon_t
+    \end{split}
+\end{equation*}
+
+Donde:
+\begin{itemize}
+    \item $D_{1t}$: Indicadora sobre los meses de marzo y agosto de 2020, explicando los efectos del confinamiento obligatorio.
+    \item $D_{2t}$: Indicadora sobre meses posteriores a  septiembre de 2020, explicando los efectos del confinamiento selectivo.
+    \item $M_{mt}$: Indicadoras sobre los meses para capturar efectos estacionales en las series.
+    \item $\gamma_{m}$: Estimación del efecto estacional de la serie sobre la variable respuesta.
+    \item $\varepsilon_t$: Error de distribución normal con estructura de correlación temporal, es decir:
+
+    Donde $V$ corresponde a la matriz de correlaciones entre residuos temporales, a los que se les dota una estructura $ARMA(p,q)$. Una alternativa para este fueron los residuales Newey-West, que logran corregir los errores estándar de los predictores lineales con casos en los que no se consigue capturar la estructura de correlación o existencia de heterocedasticidad.
+\end{itemize}
+
+\subsection{Análisis Contrafactual}
+
+Para revisar el efecto de los eventos presentados en la pandemia se realizará un análisis contrafactual, por el que se realiza una estimación de la estructura de la serie entre los meses de enero 2017 y febrero de 2020 y posteriormente se estiman predicciones sobre el $DHD_t$. Para ello se toma en cuenta que el estimador de mínima varianza es:
+
+[comocar el estimador y su cosntrucción]
+
+
+
+\subsection{Métricas de Modelamiento}
+
+
+\section[Metodología]{Metodología}
+
+Para estimar los efectos de la pandemia se va a proceder, como se venía insinuando previamente en el texto, con el siguiente análisis de datos:
+
+\begin{enumerate}
+    \item Regresión Dinámica: Estimación e inferencia de parámetros sobre eventos relacionados con la pandemia para un modelo de regresion lineal dinámico.
+    \item Análisis Contrafactual: Estimación de la serie con meses previos a la pandemia evaluando su comportamiento en caso de que la misma no se hubiese presentado.
+    \item Análisis de I-SARIMA: Estimación e inferencia de parámetros sobre eventos relacionados con la pandemia para un modelo SARIMA con Intervención.
+    \item Comparación entre los anteriores, tomando como modelo principal la regresión dinámica.
+\end{enumerate}
+
+Para medir correctamente el consumo de principio activo en el país se tuvo que hacer uso de la dosis habitante definida $DHD_t$, medida mensual con la que se consigue una medición de principio activo corregida por la población del país y cantidad de días por mes. 
+
+\subsection{DHD: Variable de Interés} 
+
+Para construir la variable de interés se tuvo que tomar en cuenta que no existe un registro de medicamentos con el que se pueda conocer el \textbf{DHD} vendido dentro de un período de tiempo. Por tanto, para construir la base de datos, se necesitó precisar el origen de cada componente de la medida de interés. 
+
+Una vez obtenidos estos datos, se realiza join de las bases mediante mes para la población de personas como la cantidad de unidades vendidas por mes, y por nomenclatura de principio activo (ATC5) para poder calcular los miligramos suministrados a la población por cada uno de estos. 
+
+\subsection{Bases de Datos}
+            
+Para construir la variable de interés $DHD_t$ se necesitó de las siguientes bases de datos, con sus respectivas descripciones presentes en los anexos de este texto.
+
+
+\subsubsection{SISMED: Sistema de Información de Precios de Medicamentos}
+
+De esta base se extrae la cantidad de medicamentos vendidos mensualmente por ambos canales comercial e institucional. Se puede confiar en la veradicad de esta información ya que, tal y como indica la circular 06 de 2018, todas las transacciones de medicamentos deben ser regitradas, además presentan una verificación por parte del propio sistema para su guardado en la base.
+
+\subsubsection{CUM: Código Único de Medicamentos}
+
+La base de datos de donde se obtuvieron los datos sobre el principio activo corresponde a una base revisada previamente; esto es de particular importancia ya que esta base solo tiene abierto al público los medicamentos que figuren como vigentes dentro de la misma.
+
+Esta base permitirá conocer la cantidad de principio activo dentro de cada presentación de medicamento, cada una identificada con su respectivo código CUM (disponible en la base SISMED y con el que se hace la unión de ambas bases). 
+
+El archivo de descarga se consigue desde la misma consulta de referencia.
+
+\subsubsection{DDD: Dosis Diaria Definida}
+
+Es menester aclarar que esta dosis diaria definida no corresponde a una prescripción de medicamento, sino a una unidad de medida para el consumo poblacional de cada principio activo. La obtención de esta base se hizo por medio de un scraper que fue buscando los siguientes índices ATC:
+
+\begin{tabular}{ll}
+    \hline
+    Código ATC & Tipo de Principio Activo\\
+    \hline
+    N06A & Antidepresivos\\
+    N05BA & Ansiolíticos benzodiazepínicos\\
+    N05C &Hipnóticos y sedantes\\
+    N05A &Antipsicóticos\\
+    \hline
+\end{tabular}
+
+La página de referencia no ofrecía acceso a un archivo de descarga para estas mediciones, por lo que se optó por un proceso de scraping para cada código ATC.
+
+\subsubsection{Proyecciones y Retroproyecciones sobre el DANE}
+
+La variable $DHD_t$ tiene un componente $p_t$ correspondiente a la cantidad de personas que pueden acceder al medicamento. El origen de esta métrica son las proyecciones y retroproyecciones del DANE realizadas con el censo nacional 2018. Para ello se utilizó el total de la población colombiana, debido a que el DANE no ofreció una cantidad de población dentro de sus retroproyecciones. Debido a que estas proyecciones son anuales, se incorporó un interpolado mensual de splines y con meses ancla a junio del año anterior / posterior del inicio o fin de la serie para obtener mediciones precisas. 
+
+\subsubsection{Construcción de Datos}
+
+Para construir la variable $DHD_t$ se realizó el siguiente proceso:
+
+\begin{enumerate}
+    \item Se seleccionaron de la base \textbf{SISMED} aquellos medicamentos codificados con el ATC presente en la tabla XX. 
+    \item Se tomó la base \textbf{CUM} para obtener el registro de miligramos de unidades y cantidad de principio activo.
+    \item Por medio de las funciones del paquete \texttt{tidyverse} de R, se realizó la union de ambas \textbf{CUM} y \textbf{SISMED}.
+    \item Se seleccionaron los medicamentos que contaran con presentación en tabletas o XX
+    \item Mediante un proceso de web-scraping, se obtuvieron de la página del DDD las mediciones de DDD, junto con sus unidades correspondientes a su ATC.
+    \item Se unieron las bases anteriores para incorporar en cada registro de \textbf{SISMED} las cantidad de principio activo por unidad, las unidades vendidas por cada presentación y su respectiva DDD.
+    \item Se incorpora a la base unida un índice para cada mes (108 meses comprendidos entre enero de 2017 y diciembre de 2025), con el que se hace unión con la base de proyecciones y retro-proyecciones poblacionales interpoladas del DANE.
+    \item Se suma la cantidad de miligramos de principio activo por cada mes en específico.
+    \item Se construye la variable $DHD_t$ con la formula de xd, incorporando tanto DDD como la cantidad de población total brindada por la proyección del DANE.
+\end{enumerate}
+
+\begin{tabular}{lll}
+\hline
+Nombre de la molécula & Código ATC & Disponibilidad \\
+\hline
+alprazolam    & N05BA12 & Disponible \\
+amitriptyline & N06AA09 & Disponible \\
+clobazam      & N05BA09 & Disponible \\
+clonazepam    & N03AE01 & Disponible \\
+diazepam      & N05BA01 & Disponible \\
+escitalopram  & N06AB10 & Disponible \\
+fluoxetine    & N06AB03 & Disponible \\
+lorazepam     & N05BA06 & Disponible \\
+losartan      & C09CA01 & No disponible \\
+olanzapine    & N05AH03 & Disponible \\
+quetiapine    & N05AH04 & Disponible \\
+risperidone   & N05AX08 & Disponible \\
+sertraline    & N06AB06 & Disponible \\
+trazodone     & N06AX05 & No disponible \\
+vortioxetine  & N06AX26 & Disponible \\
+zolpidem      & N05CF02 & Disponible \\
+zopiclone     & N05CF01 & Disponible \\
+\hline
+\label{Moléculas consideradas para el estudio. La disponibilidad se marca según su existencia}
+\end{tabular}
+
+\subsection{Limpieza y Validación de Datos}
+
+Se tomó como referencia para la validación de análisis y resultados la tesis de Prieto 2023, en la que se revisaba el consumo anual aditivo de DHD (con intervalos trimestrales), así como por cada principio activo. Por otro lado, para obtener una medida certera sobre la cantidad de medicamento consumido, se necesitó seleccionar únicamente medicamentos cuya presentacion fuera en tabletas, esto debido a que presentaciones como ampollas, frascos, vial, o inhalador no brindaban información correcta.
+
+\subsection{Datos Faltantes}
+
+Dentro de los posibles datos faltantes para este trabajo de monografía se identificaron dos posibles tipos de datos faltantes:
+
+\subsubsection{Venta por Medicamento}
+
+Corresponden a meses en los que una presentación en particular no haya sido registrado en la base SISMED por algún motivo. Esto se puede revisar en la tabla tatatata en la que se muestran, desde la base SISMED, los meses en los que no haya sido registrado cada medicamento.
+
+\subsubsection{Venta por Mes}
+
+Corresponden a meses en los que ningún medicamento correspondiente a un principio activo fue vendido. Esto Corresponde a dos posibles causas:
+
+\begin{itemize}
+    \item Se señala una verdadera no venta del principio activo durante todo un mes.
+    \item Existió un error de registro de venta, atribuyendo ventas de un medicamento a un mes incorrecto (que puede verse evidenciado en aumentos inexplicables cercanos al dato faltante). Este sería un error particularmente raro debido a las exigencias del Minitario de Salud (2019) sobre el registro SISMED.
+    \item Existió un error de registro de venta que ni siquiera se refleja dentro de las ventas totales, donde la serie no muestra alteraciones cercanas al dato faltante.
+\end{itemize}
+
+En los principios activos diazepam y vortioxetina se presentaron datos faltantes. La vortioxetina, como indica la serie del grafico tan, no mostró alteraciones, además que no presentaba picos en su desarrollo temporal, por lo que su tratamiento consistió en aplicar splines. Por otro lado, el diazepam venía mostrando un incremento temporal en su venta, por lo que se decidió atribuir su dato faltante a un incorrecto registro e imputar con un 1 (debido a que la serie sería analizada en escala log).
+
+En este estudio hubo certeza sobre la identificación sobre datos faltantes debido a que la circular de 2019 es clara sobre cómo se deben registrar los medicamentos y sus ventas en la base del \textbf{SISMED}, en la cual se señala una  verificación tanto por parte de las entidades dispensadoras como del propio equipo encargado de la base.
+
+\section[Resultados]{Resultados}
+
+En este estudio se encontraron varios escenarios con cada principio activo.
+
+\begin{itemize}
+    \item Caso 1: Los residuales superaron pruebas de normalidad y pudieron ser cubiertos con la estructura ARMA: Se sigue el modelo propuesto. 
+    \item Caso 2: Los residuales no superaron pruebas de normalidad y pudieron ser cubiertos con estructura arma. Se busca un ajuste por modelos lineales generalizados. 
+    \item Caso 3: Los residuales superaron pruebas de normalidad y no pudieron ser explicados con estructura ARMA: Se aplicó modelamiento NEwey-West para los errores estándar.
+    \item Caso 4: Los residuales no superaron pruebas de normalidad y no pudieron ser explicados con estructura ARMA: Se aplicó modelamiento NEwey-West para los errores estándar con uso de modelos lineales generalizados.
+\end{itemize}
+
+\subsection{Diagnóstico de los Residuales}
+Se ajustó el modelo de regresión dinámica a cada principio activo por mínimos cuadrados ordinarios (con la función \texttt{lm()} debido a su compatibilidad con el paquete \texttt{sandwich}). Se revisaron tres supuestos sobre los residuales: normalidad, ausencia de autocorrelación y varianza constante. Para ello se usaron las pruebas de normalidad \textbf{Shapiro--Wilk}, \textbf{Anderson--Darling} (paquete \texttt{nortest}), \textbf{Lilliefors} (paquete \texttt{nortest}) y \textbf{Jarque--Bera} (paquete \texttt{tseries}); de autocorrelación \textbf{Durbin--Watson} (paquete \texttt{car}), \textbf{Breusch--Godfrey} (paquete \texttt{lmtest}) y \textbf{Ljung--Box}; y de heterocedasticidad \textbf{Breusch--Pagan} (paquete \texttt{lmtest}), \textbf{White} (paquete \texttt{skedastic}) y \textbf{Goldfeld--Quandt} (paquete \texttt{skedastic}), con nivel de significancia de $\alpha=0.05$.
+
+Como se muestra en la tabla \ref{tab:diagnostico_residuales}, la estructura ARMA con mínimos cuadrados generalizados no corrigió la autocorrelación, además que múltiples modelos se mostraron como significativamente heterocedásticos, por esta razón no se tomó como estrategia principal. En su lugar, se usaron errores estándar \textbf{Newey-West}, que son robustos ante autocorrelación y heterocedasticidad.
+
+\begin{table}[htbp]
+\centering
+\caption{Diagnóstico de los residuales del modelo de regresión dinámica. Sí indica normalidad cumplida, autocorrelación presente o heterocedasticidad presente.}
+\label{tab:diagnostico_residuales}
+\begin{tabular}{lccc}
+\toprule
+\textit{Medicamento} & \textit{Normalidad} & \makecell{\textit{Auto-}\\\textit{correlación}}& \makecell{\textit{Heteroce-}\\\textit{dasticidad}} \\
+\midrule
+Alprazolam   & No & No & Sí \\
+Clobazam     & No & Sí & Sí \\
+Clonazepam   & No & No & Sí \\
+Diazepam     & No & Sí & No \\
+Escitalopram & Sí & No & No \\
+Fluoxetina   & Sí & No & No \\
+Lorazepam    & Sí & Sí & Sí \\
+Olanzapina   & Sí & No & No \\
+Quetiapina   & Sí & No & No \\
+Risperidona  & No & Sí & Sí \\
+Sertralina   & No & No & No \\
+Vortioxetina & No & Sí & No \\
+Zolpidem     & No & No & Sí \\
+Zopiclona    & Sí & Sí & No \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{itemize}
+    \item Seis principios activos superaron la prueba de normalidad: escitalopram, fluoxetina, lorazepam, olanzapina, quetiapina y zopiclona. Los ocho restantes no la superaron.
+    \item Seis principios activos presentaron autocorrelación: clobazam, diazepam, lorazepam, risperidona, vortioxetina y zopiclona. Otros seis presentaron heterocedasticidad: alprazolam, clobazam, clonazepam, lorazepam, risperidona y zolpidem.
+    \item Cuatro principios activos cumplieron los tres supuestos: escitalopram, fluoxetina, olanzapina y quetiapina.
+
+\end{itemize}
+
+
+\subsection{Resultados de Regresion}
+
+\subsubsection{Cambio de Pendiente}
+
+% --- Figura 1: Cambio de pendiente ---
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=0.5\textwidth]{regresion dinamica/Cambio de pendiente desde el mes 45 (razon mensual).png}
+    \caption{Cambio de pendiente en la regresión dinámica a partir del mes 45.}
+    \label{fig:cambio_pendiente}
+\end{figure}
+
+\subsubsection{Pandemia Fase 1}
+
+% --- Figura 3: Pandemia Fase 1 ---
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=0.5\textwidth]{regresion dinamica/Pandemia (fase 1).png}
+    \caption{Impacto durante la fase 1 de la pandemia.}
+    \label{fig:pandemia_fase1}
+\end{figure}
+
+\subsubsection{Pandemia Fase 2}
+
+% --- Figura 4: Pandemia Fase 2 ---
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=0.5\textwidth]{regresion dinamica/Pandemia (fase 2).png}
+    \caption{Impacto durante la fase 2 de la pandemia.}
+    \label{fig:pandemia_fase2}
+\end{figure}
+
+\subsubsection{Desabastecimiento}
+
+% --- Figura 2: Desabastecimiento ---
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=0.5\textwidth]{regresion dinamica/Desabastecimiento.png}
+    \caption{Análisis de desabastecimiento.}
+    \label{fig:desabastecimiento}
+\end{figure}
+
+\subsection{Serie Contrafactual}
+
+\subsection{ARIMA de Intervención}
+
+\subsection{Comparación de Modelos}
+
+
+
+
+
+\section[Discusión]{Discusión}
+
+
+\section[Conclusiones]{Conclusiones}
+
+\section*{Anexos}
+
+\newpage
+
+
+\subsection{I: Tablas descriptivas de las bases de datos.}
+
+\begin{table*}[!t]
+\caption{Variables de la base SISMED}\label{tab:sismed}
+\centering
+\footnotesize
+\renewcommand{\arraystretch}{1.15}
+\begin{tabular}{>{\raggedright\arraybackslash}p{0.30\textwidth} >{\raggedright\arraybackslash}p{0.62\textwidth}}
+\toprule
+\textbf{Variable} & \textbf{Descripción} \\
+\midrule
+\textit{CUM} & Código Único de Medicamentos. Identifica la presentación comercial. \\
+\textit{ATC} & Código ATC del principio activo, a cinco niveles (siete caracteres). \\
+\textit{Grupo.\allowbreak ATC} & Código ATC del subgrupo químico, a cuatro niveles (cinco caracteres). \\
+\textit{Nombre.\allowbreak Grupo.\allowbreak ATC} & Nombre del subgrupo químico asociado al código \textit{Grupo.ATC}. \\
+\textit{Descripción.\allowbreak ATC} & Nombre de la sustancia asociada al código \textit{ATC}. \\
+\textit{Principio.\allowbreak Activo} & Sustancia activa del medicamento. \\
+\textit{Concentración} & Cantidad de principio activo por unidad de dosificación. \\
+\textit{Forma.\allowbreak Farmacéutica} & Forma física de presentación del medicamento. \\
+\textit{Producto} & Nombre comercial del producto, con concentración y forma. \\
+\textit{Titular} & Titular del registro sanitario. Reporta las ventas al SISMED. \\
+\textit{Registro.\allowbreak Sanitario} & Número del registro sanitario asignado por el INVIMA. \\
+\textit{Estado.\allowbreak Registro} & Estado del registro sanitario (por ejemplo, vigente, vencido o cancelado). \\
+\textit{Fecha} & Mes de reporte de la venta. El día se fija en 01. \\
+\textit{Valor.\allowbreak Total.\allowbreak Comercial} & Valor total de ventas del mes en el canal comercial, en pesos corrientes. \\
+\textit{Valor.\allowbreak Total.\allowbreak Institucional} & Valor total de ventas del mes en el canal institucional, en pesos corrientes. \\
+\textit{Valor.\allowbreak Total.\allowbreak Comercial.\allowbreak Corregido.\allowbreak Inflación} & Valor total del canal comercial ajustado por inflación. No es un campo oficial del SISMED. \\
+\textit{Valor.\allowbreak Total.\allowbreak Institucional.\allowbreak Corregido.\allowbreak Inflación} & Valor total del canal institucional ajustado por inflación. No es un campo oficial del SISMED. \\
+\textit{Unidades.\allowbreak Comercial} & Unidades vendidas en el mes en el canal comercial. \\
+\textit{Unidades.\allowbreak Institucional} & Unidades vendidas en el mes en el canal institucional. \\
+\bottomrule
+\end{tabular}
+\end{table*}
+
+\begin{table*}[!t]
+\caption{Variables de la base CUM (Código Único de Medicamentos vigentes)}\label{tab:cum}
+\centering
+\footnotesize
+\renewcommand{\arraystretch}{1.15}
+\begin{tabular}{>{\raggedright\arraybackslash}p{0.27\textwidth} >{\raggedright\arraybackslash}p{0.65\textwidth}}
+\toprule
+\textbf{Variable} & \textbf{Descripción} \\
+\midrule
+\textit{expediente} & Número de expediente del medicamento. Identifica el trámite del registro sanitario. \\
+\textit{producto} & Nombre comercial del producto, con su concentración y forma. \\
+\textit{titular} & Titular del registro sanitario. \\
+\textit{registrosanitario} & Número del registro sanitario asignado por el INVIMA. \\
+\textit{fechaexpedicion} & Fecha de expedición del registro sanitario. \\
+\textit{fechavencimiento} & Fecha de vencimiento del registro sanitario. Los valores vacíos o 01/01/3000 indican ausencia de fecha de vencimiento. \\
+\textit{estadoregistro} & Estado del registro sanitario (por ejemplo, vigente). \\
+\textit{expedientecum} & Número de expediente que forma la primera parte del CUM (número trazador). \\
+\textit{consecutivocum} & Consecutivo asignado a la presentación comercial. Forma la segunda parte del CUM. \\
+\textit{cantidadcum} & Cantidad de unidades de contenido de la presentación comercial. \\
+\textit{descripcioncomercial} & Descripción de la presentación comercial: empaque, contenido y condición de uso. \\
+\textit{estadocum} & Estado del CUM (activo o inactivo). \\
+\textit{fechaactivo} & Fecha en que el CUM pasó a estado activo. \\
+\textit{fechainactivo} & Fecha en que el CUM pasó a estado inactivo. \\
+\textit{muestramedica} & Indica si la presentación está registrada como muestra médica (Si o No). \\
+\textit{unidad} & Unidad de la presentación comercial (en el \textit{head}, el valor es \textit{U}). \\
+\textit{atc} & Código ATC del principio activo, hasta el quinto nivel. \\
+\textit{descripcionatc} & Nombre de la sustancia asociada al código ATC. \\
+\textit{viaadministracion} & Vía de administración del medicamento (por ejemplo, oral o intravenosa). \\
+\textit{concentracion} & Código del tipo de concentración estandarizada (en el \textit{head}: A, B, C y S). \\
+\textit{principioactivo} & Nombre del principio activo reportado en el registro. \\
+\textit{unidadmedida} & Unidad de medida de la cantidad de principio activo (por ejemplo, mg o g). \\
+\textit{cantidad} & Cantidad de principio activo, expresada en \textit{unidadmedida}. \\
+\textit{unidadreferencia} & Unidad de referencia a la que se asocia la cantidad de principio activo (por ejemplo, tableta o 1 mL). \\
+\textit{formafarmaceutica} & Forma farmacéutica del medicamento. \\
+\textit{nombrerol} & Nombre del establecimiento o razón social que cumple el rol (fabricante o importador). \\
+\textit{tiporol} & Tipo de rol del establecimiento (por ejemplo, fabricante o importador). \\
+\textit{modalidad} & Modalidad de la actividad del rol (por ejemplo, fabricar y vender, o importar y vender). \\
+\textit{IUM} & Identificador Único de Medicamento. Código de trece dígitos: seis del nivel 1, cuatro del nivel 2 y tres del nivel 3. \\
+\bottomrule
+\end{tabular}
+\end{table*}
+
+
+\begin{table*}[!t]
+\caption{Variables de la base DDD (Dosis Diaria Definida, índice ATC/DDD de la OMS)}\label{tab:ddd}
+\centering
+\footnotesize
+\renewcommand{\arraystretch}{1.15}
+\begin{tabular}{>{\raggedright\arraybackslash}p{0.20\textwidth} >{\raggedright\arraybackslash}p{0.72\textwidth}}
+\toprule
+\textbf{Variable} & \textbf{Descripción} \\
+\midrule
+\textit{ATC\_code} & Código ATC de la sustancia, hasta el quinto nivel. \\
+\textit{Name} & Nombre de la sustancia, normalmente su denominación común internacional (DCI). \\
+\textit{DDD} & Dosis diaria definida. Dosis media de mantenimiento por día de un fármaco, usado en su indicación principal en adultos. Se expresa en la unidad de \textit{U}. \\
+\textit{U} & Unidad en que se expresa la \textit{DDD} (g, mg, mcg, U, TU, MU, mmol o ml). \\
+\textit{Adm\_R} & Vía de administración a la que corresponde la \textit{DDD} (por ejemplo, O: oral; P: parenteral; R: rectal). \\
+\textit{Note} & Nota de la OMS sobre la \textit{DDD}. Aclara la forma de uso o la presentación a la que aplica. Aparece vacía en las filas del \textit{head}. \\
+\textit{Consulta} & Código ATC usado para consultar la base (por ejemplo, N06AA). No es un campo de la OMS. \\
+\bottomrule
+\end{tabular}
+\end{table*}
+
+
+
+\section{Referencias}
+
+\begin{enumerate}
+  \item WHO Collaborating Centre for Drug Statistics Methodology. (2026).
+  \emph{ATC/DDD Index}. Norwegian Institute of Public Health.
+  Recuperado el 25 de octubre de 2026, de
+  \url{https://atcddd.fhi.no/atc_ddd_index/}
+
+  \item Departamento Administrativo Nacional de Estadística. (s. f.).
+  \emph{Proyecciones de población}.
+  Recuperado el 25 de octubre de 2026, de
+  \url{https://www.dane.gov.co/index.php/estadisticas-por-tema/demografia-y-poblacion/proyecciones-de-poblacion}
+
+  \item Instituto Nacional de Vigilancia de Medicamentos y Alimentos. (s. f.).
+  \emph{Código único de medicamentos vigentes} [Conjunto de datos].
+  Datos Abiertos Colombia. Recuperado el 25 de octubre de 2026, de
+  \url{https://www.datos.gov.co/Salud-y-Protecci-n-Social/C-DIGO-NICO-DE-MEDICAMENTOS-VIGENTES/i7cb-raxc/about_data}
+
+  \item Del Castillo, L. C., \& Osorio, L. (2026). Efecto de la pandemia COVID-19 en la dispensación ambulatoria de algunos antibióticos por parte de un gestor farmacéutico en una ciudad de Colombia. \textit{Infectio, 30}(2), 157--166. \url{https://mail.revistainfectio.org/ojs_files_infectio_demo/journals/1/articles/1290/6a308d74cf02f.pdf}
+
+  \item Castro Espinosa, J., \& Molineros Gallón, L. F. (2016). Consumo de antibióticos a partir de las ventas en droguerías en Santiago de Cali, Colombia. \textit{Revista Cubana de Farmacia, 50}(1), 68--84. \url{https://www.medigraphic.com/pdfs/revcubfar/rcf-2016/rcf161g.pdf}
+
+  \item Gasparrini, A. (2017). \textit{2017\_lopezbernal\_IJE\_codedata: A tutorial on interrupted time series regression for the evaluation of public health interventions} [Parte de código fuente para modelo de regresion]. GitHub. \url{https://github.com/gasparrini/2017_lopezbernal_IJE_codedata}
+
+  \item Prieto Castillo, A. M. (2023). \textit{Impacto antes y durante la pandemia COVID-19 en la tendencia de consumo para psicofármacos en Colombia: un análisis de series de tiempos interrumpidas} [Tesis de maestría, Universidad Nacional de Colombia]. Repositorio Institucional UNAL. \url{https://repositorio.unal.edu.co/handle/unal/85308}
+
+  \item Schaffer, A. L., Dobbins, T. A., \& Pearson, S.-A. (2021). Interrupted time series analysis using autoregressive integrated moving average (ARIMA) models: A guide for evaluating large-scale health interventions. \textit{BMC Medical Research Methodology, 21}, Article 58. \url{https://doi.org/10.1186/s12874-021-01235-8}
+
+% --------------- marco teórico -------------
+% series temporales
+
+  \item Wei, W. W. S. (2006). \textit{Time Series Analysis: Univariate and Multivariate Methods} (2.\textsuperscript{a} ed.). Pearson Addison Wesley, Boston.
+
+  \item Montgomery, D. C., Jennings, C. L. y Kulahci, M. (2015). \textit{Introduction to Time Series Analysis and Forecasting} (2.\textsuperscript{a} ed.). Wiley, Hoboken.
+
+% regresion dinamica: recomendaciones metodologicas
+
+  \item Wagner, A. K., Soumerai, S. B., Zhang, F., \& Ross-Degnan, D. (2002). Segmented regression analysis of interrupted time series studies in medication use research. \textit{Journal of Clinical Pharmacy and Therapeutics, 27}(4), 299--309. \url{https://doi.org/10.1046/j.1365-2710.2002.00430.x}
+
+% Estimador sandwich: NW
+   \item Cottrell, A., \& Lucchetti, R. (2026). \textit{Gretl user's guide: Gnu regression, econometrics and time-series library}. \url{https://gretl.sourceforge.net/gretl-help/gretl-guide.pdf}
+
+% ministerio de salud (BASE SISMED)
+   \item Comisión Nacional de Precios de Medicamentos y Dispositivos Médicos. (2018). \textit{Circular 06 de 2018}. Ministerio de Salud y Protección Social. \url{https://www.minsalud.gov.co/sites/rid/Lists/BibliotecaDigital/RIDE/DE/DIJ/circular-06-de-2018-cpmdm.pdf}
+
+% -------------------------------------------------------------------------------------
+% --------------------------- BASES DE DATOS (DOCUMENTACIÓN) --------------------------
+% -------------------------------------------------------------------------------------
+
+% documentación SISMED
+
+  % Variables: CUM, Producto, Registro.Sanitario, Valor.Total.*, Unidades.* (definiciones del cubo SISMED)
+  \item Ministerio de Salud y Protección Social. \textit{Capacitación del cubo SISMED}. \url{https://www.minsalud.gov.co/sites/rid/Lists/BibliotecaDigital/RIDE/VS/MET/cubo-sismed-capacitacion.pdf}
+
+  % Variables: Estado.Registro, Unidades.* (unidad de facturación), Valor.Total.* (valor total y unidades bonificadas)
+  \item Ministerio de Salud y Protección Social. \textit{ABECÉ Circular 06 de 2018 -- SISMED}. \url{https://www.minsalud.gov.co/sites/rid/Lists/BibliotecaDigital/RIDE/VS/MET/abece-circular-06-2018-sismed.pdf}
+
+  % Variables: Estado.Registro (actualización con registros sanitarios del INVIMA)
+  \item Ministerio de Salud y Protección Social. \textit{ABECÉ SISMED}. \url{https://www.minsalud.gov.co/sites/rid/Lists/BibliotecaDigital/RIDE/VS/MET/abece-sismed.pdf}
+
+  % Variables: Valor.Total.Comercial, Valor.Total.Institucional, Unidades.Comercial, Unidades.Institucional (definición de canal)
+  \item Ministerio de Salud y Protección Social. \textit{Termómetro de precios de medicamentos}. \url{https://minsalud.gov.co/salud/medicamentos-y-tecnologias/Paginas/termometro-de-precios.aspx}
+
+  % Variables: Valor.Total.Comercial, Valor.Total.Institucional (canal institucional: recursos públicos; canal comercial: recursos privados; pesos corrientes)
+  \item Ministerio de Salud y Protección Social. \textit{Boletín SISMED No. 1 (2018)}. \url{https://www.minsalud.gov.co/sites/rid/Lists/BibliotecaDigital/RIDE/VS/MET/Boletin-sismed-f06-08-2018.pdf}
+
+  % Variables: Fecha (reporte mensual desde la Circular 17 de 2023; antes trimestral)
+  \item Comisión Nacional de Precios de Medicamentos y Dispositivos Médicos. \textit{Circular 17 de 2023}. \url{https://normograma.invima.gov.co/normograma/compilacion/docs/circular_cnpmd_0017_2023.htm}
+
+  % Variables: Fecha, CUM (estructura del archivo de ventas por mes, canal y CUM)
+  \item Ministerio de Salud y Protección Social. \textit{Ejemplo de estructura del reporte SISMED}. \url{https://www.minsalud.gov.co/sites/rid/Lists/BibliotecaDigital/RIDE/VS/MET/ejemplo-estructura-reporte-sismed.pdf}
+
+  % Variables: Titular (oferente = titular del registro sanitario que reporta ventas)
+  \item Universidad Nacional de Colombia. \textit{Análisis de desabastecidos: cuarto informe final}. \url{https://www.valoraanalitik.com/wp-content/uploads/2023/03/Desabastecidos_Cuarto_Informe_Final-Universidad-Nacional.pdf}
+
+% documentación CUM 
+   
+  % Variables: expediente, expedientecum, consecutivocum (CUM = número trazador + consecutivo; definición legal del CUM)
+  \item Ministerio de la Protección Social. \textit{Resolución 255 de 2007}, por la cual se adopta el Código Único Nacional de Medicamentos. \url{https://normograma.invima.gov.co/compilacion/docs/resolucion_minproteccion_0255_2007.htm}
+
+  % Variables: atc, descripcionatc, muestramedica (condición de muestra médica en el listado CUM del INVIMA)
+  \item Comisión Nacional de Precios de Medicamentos y Dispositivos Médicos. \textit{Circular 06 de 2018}. \url{https://normograma.supersalud.gov.co/compilacion/docs/circular_cnpmd_0006_2018.htm}
+
+  % Variables: IUM (estructura de trece dígitos y niveles)
+  \item Ministerio de Salud y Protección Social. \textit{ABC del Estándar de Datos de Medicamentos}. \url{https://www.saludcapital.gov.co/CTDLab/Publicaciones/2016/ABC_Estandar_Medicamentos.pdf}
+
+  % Variables: IUM, concentracion, unidadmedida, cantidad, unidadreferencia, formafarmaceutica, viaadministracion, muestramedica, nombrerol, tiporol (atributos del estándar de datos)
+  \item INVIMA. \textit{Autorización de comercialización y registros}. \url{https://invima.gov.co/productos-vigilados/medicamentos-y-productos-biologicos/autorizacion-de-comercializacion-registros}
+
+  % Variables: IUM (niveles MDC, MCO y MPC; asignación por el INVIMA)
+  \item INVIMA. \textit{Instructivo para la solicitud del IUM en el aplicativo SIDAM} (2024). \url{https://www.invima.gov.co/biblioteca/preview/90884}
+
+  % Variables: CUM completo, fuente de los datos (conjunto de datos abiertos publicado por el INVIMA)
+  \item INVIMA. \textit{Código Único de Medicamentos Vigentes}. Portal de Datos Abiertos de Colombia. \url{https://www.datos.gov.co/Salud-y-Protecci-n-Social/C-DIGO-NICO-DE-MEDICAMENTOS-VIGENTES/i7cb-raxc}
+
+% documentación DDD
+
+  % Variables: ATC_code, Name, DDD, U, Adm_R, Note (estructura del índice y definición de "Name")
+  \item WHO Collaborating Centre for Drug Statistics Methodology. \textit{ATC/DDD Index 2026}. \url{https://atcddd.fhi.no/atc_ddd_index/}
+
+  % Variables: U, Adm_R (lista de abreviaturas de unidades y vías de administración)
+  \item WHO Collaborating Centre for Drug Statistics Methodology. \textit{List of abbreviations}. \url{https://www.whocc.no/atc_ddd_alterations__cumulative/ddd_alterations/abbrevations}
+
+  % Variables: DDD (definición; una DDD por código ATC y vía de administración)
+  \item WHO Collaborating Centre for Drug Statistics Methodology. \textit{DDD: Definition and general considerations}. \url{https://atcddd.fhi.no/ddd/}
+
+  % Variables: DDD (la DDD es una unidad de medida y no la dosis prescrita)
+  \item World Health Organization. \textit{Defined Daily Dose (DDD)}, ATC/DDD Toolkit. \url{https://www.who.int/tools/atc-ddd-toolkit/about-ddd}
+
+  % Variables: Note (ejemplo de notas por forma de dosificación, como Inhal.aerosol)
+  \item WHO Collaborating Centre for Drug Statistics Methodology. \textit{ATC/DDD Index 2026: R03AC}. \url{https://atcddd.fhi.no/atc_ddd_index/?code=R03AC}
+
+  
+  
+\end{enumerate}
+
+\end{document}
+
+
