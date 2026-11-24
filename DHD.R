@@ -8,7 +8,10 @@ library(tidyr)
 library(tidytext)
 library(readr)
 library(tsibble)
+library(lubridate)
+library(zoo)
 
+# v1.1: Imputación de datos faltantes.
 # v1.0: Código probado y listo.
 # v0.3: adicion de indicadoras para analiss
 # v0.2: verificacion de la base con otros scripts
@@ -64,7 +67,6 @@ for (i in 1:length(lista_principio)) {
       DHDi = (sum(mg_vendidos_inst)/ (first(DDD) * first(total_poblacional) * first(n_dias))) * 1000,
       DHDc = (sum(mg_vendidos_comm)/ (first(DDD) * first(total_poblacional) * first(n_dias))) * 1000,
       mes = as.integer(first(mes)),
-      medicamento = first(principioactivo),
       fecha = first(fecha)
     ) %>%
     as_tsibble(index = indice, regular = T) %>%
@@ -87,6 +89,42 @@ for (i in 1:length(lista_principio)) {
 
 names(principio) = lista_principio
 
-save(principio, "Lista Principios DHD.RData")
+# imputacion
+
+imputar_spline <- function(d, inicio = as.Date("2017-01-01")) {
+  n <- nrow(d)
+  d$imputado <- is.na(d$DHDi) | is.na(d$DHDc)
+  
+  # Completa fecha y mes desde el índice
+  d$fecha <- seq(inicio, by = "month", length.out = n)
+  d$mes   <- month(d$fecha)
+  
+  # Copia indicadoras desde la fila anterior
+  for (v in c("pandemia1", "pandemia2", "desabastecimiento")) {
+    d[[v]] <- na.locf(d[[v]], na.rm = FALSE)
+  }
+  
+  # Spline en escala log para DHDi y DHDc
+  for (v in c("DHDi", "DHDc")) {
+    d[[v]] <- exp(na.spline(log(d[[v]]), x = seq_len(n), na.rm = FALSE))
+  }
+  
+  # Recalcula DHDt solo donde falta
+  d$DHDt <- ifelse(is.na(d$DHDt), d$DHDi + d$DHDc, d$DHDt)
+  d
+}
+
+# diazepam: imputacion por nulidad
+
+principio$diazepam <- imputar_spline(principio$diazepam)
+
+principio$diazepam[92,2] = principio$diazepam[93,2]
+
+# vortiozetine: imputacion por delecion
+
+principio$vortioxetine <- imputar_spline(principio$vortioxetine)
+
+
+save(principio, file = "Lista Principios DHD.RData")
 
 rm(list = ls())
