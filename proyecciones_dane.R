@@ -2,6 +2,7 @@
 
 rm(list = ls())
 
+# v 1.3: Seleccion de poblacion entre 14 y 80 años.
 # v 1.2: Salida de enero 2017 a diciembre 2025, indexada del mes 1 al 108
 # v 1.1: Lectura directa de proyecciones y retroproyecciones (incluye 2017)
 # v 1.0: Interpolacion mensual anclada al mes central del censo 2018
@@ -46,16 +47,8 @@ fecha_fin_salida    = as.Date("2025-12-01")
 n_meses_esperado    = 108
 
 # proyecciones 2018-2070 (limpieza de proyecciones_dane.R)
-proyec_tmp = readxl::read_xlsx("bases/PPED-AreaSexoEdadNac-2018-2070.xlsx", sheet = 3)
+proyec_tmp = readxl::read_xlsx("bases/PPED-AreaSexoEdadNac-2018-2070.xlsx", sheet = 1, col_names = T)
 
-# nombrado de variables
-colnames(proyec_tmp) = c(
-  proyec_tmp[5,1:3],
-  proyec_tmp[6,4:309]
-)
-
-# cargado
-proyec_tmp = proyec_tmp[7:133,]
 
 # normalizacion de variables
 names(proyec_tmp) = proyec_tmp %>%
@@ -65,26 +58,16 @@ names(proyec_tmp) = proyec_tmp %>%
 # seleccion de variables necesarias
 proyec_tmp = proyec_tmp %>%
   select(
-    año = AÑO,
-    total_poblacional = Total,
-    ÁREA_GEOGRÁFICA
+    año = Año,
+    total_poblacional = Suma_Total
   ) %>%
-  filter(
-    ÁREA_GEOGRÁFICA == "Total"
-    ) %>%
   mutate(
     año = as.integer(año),
     total_poblacional = as.numeric(total_poblacional)
     )
 
 # retroproyecciones 1950-2017 (limpieza de proyecciones_dane.R)
-retyec_tmp = readxl::read_xlsx("bases/PPED-AreaNac-1950-2017.xlsx", sheet = 1)
-
-# cargado
-colnames(retyec_tmp) = c(
-  retyec_tmp[2,1],
-  retyec_tmp[6,2:5]
-)
+retyec_tmp = readxl::read_xlsx("bases/PPED-AreaSexoEdadNac-1950-2017.xlsx", sheet = 1, col_names = T)
 
 # renombrado de variables
 names(retyec_tmp) = retyec_tmp %>%
@@ -95,12 +78,7 @@ names(retyec_tmp) = retyec_tmp %>%
 retyec_tmp = retyec_tmp %>%
   select(
     año = AÑO,
-    total_poblacional = Población,
-    ÁREA_GEOGRÁFICA
-  ) %>%
-  filter(
-    ÁREA_GEOGRÁFICA == "Total"
-    ) %>%
+    total_poblacional = Suma_Total) %>%
   mutate(
     año = as.integer(año),
     total_poblacional = as.numeric(total_poblacional)
@@ -118,7 +96,8 @@ proyec = bind_rows(retyec_tmp, proyec_tmp) %>%
     ) %>%
   arrange(
     año
-    )
+    ) %>%
+  filter(!is.na(total_poblacional))
 
 # verificaciones 
 stopifnot(!anyNA(proyec$año), !anyNA(proyec$total_poblacional))
@@ -174,7 +153,8 @@ stopifnot(identical(mensual$indice, 1:n_meses_esperado))
 
 mensual = mensual %>% 
   select(
-    indice,
+    indice, 
+    fecha,
     total_poblacional
     )
 

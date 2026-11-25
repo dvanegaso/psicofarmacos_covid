@@ -97,7 +97,7 @@ BASE_SISMED_DDD_DANE = BASE_SISMED_DDD_DANE %>%
     mg_vendidos_comm = unidadescomercial * activounidad
     )
 
-write.csv(BASE_SISMED_DDD_DANE,"salidas/base_DHD_final.csv")
+write.csv(BASE_SISMED_DDD_DANE,"salidas/bases_unidas.csv")
 
 rm(list = ls())
 
