@@ -21,8 +21,7 @@ library(zoo)
 
 setwd(dirname(rstudioapi::getSourceEditorContext()$path))
 
-datos = read.csv("salidas/base_DHD_final.csv")
-
+datos = read.csv("salidas/bases_unidas.csv")
 
 # indicadoras necesarias  |  intervalo temporal
 # ----------------------- # ------------------------------------------
@@ -71,7 +70,7 @@ for (i in 1:length(lista_principio)) {
     ) %>%
     as_tsibble(index = indice, regular = T) %>%
     mutate(
-      pandemia1 = as.logical(fecha > "2020-03-01" & fecha < "2020-10-01"), 
+      pandemia1 = as.logical(fecha > "2020-03-01" & fecha < "2020-08-01"), 
       pandemia2 = as.logical(fecha > "2020-09-01"), 
       desabastecimiento = as.logical(fecha > "2023-02-01" & fecha < "2023-12-01"),
     )
