@@ -10,8 +10,8 @@ Este código está estructurado de la siguiente manera:
 ├── bases/
 |       └── CÓDIGO_ÚNICO_DE_MEDICAMENTOS_VIGENTES_20261025.csv
 |       └── medicamentos_candidatos.csv
-|       └── PPED-AreaNac-1950-2017.xlsx
-|       └── PPED-AreaSexoEdadNac-2018-2070.xlsx
+|       └── PPED-AreaSexoEdadNac-1950-2017.xlsx (Requiere modificación previa tomando únicamente el total de población entre 14 y 80 años)
+|       └── PPED-AreaSexoEdadNac-2018-2070.xlsx (Requiere modificación previa tomando únicamente el total de población entre 14 y 80 años)
 |       └── principios_activos.csv
 │   └── SISMED/
 │       └── [codigo WHO de principio activo]_2026-10-26/
